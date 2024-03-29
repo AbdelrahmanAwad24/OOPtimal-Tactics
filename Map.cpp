@@ -41,6 +41,7 @@ Map::~Map()
 
 void Map::setColumns(int columns)
 {
+    columns_ = columns;
 }
 
 int Map::getColumns()

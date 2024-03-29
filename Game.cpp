@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 
-#define CONFIG_MAGIC_NUMBER "OOP\n"
+#define CONFIG_MAGIC_NUMBER "OOP"
 
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
@@ -45,7 +45,6 @@ bool Game::isValidConfig(char *config_path)
     std::ifstream file(config_path);
     std::string magic_number;
     std::getline(file, magic_number);
-
     return file.is_open() && magic_number == CONFIG_MAGIC_NUMBER;
 }
 
@@ -57,8 +56,42 @@ void Game::start()
 
 void Game::execute(Command command)
 {
-    // Implementation to execute a command
-    std::cout << "hello" << std::endl;
+    switch (command.getType())
+    {
+    case CommandType::PLACE:
+        // Implement logic to handle placing chips on the map
+        break;
+
+    case CommandType::PASS:
+        // Implement logic to handle passing the turn
+        break;
+
+    case CommandType::MOVE:
+        // Implement logic to handle moving chips on the map
+        break;
+
+    case CommandType::MAP:
+        // Implement logic to display the current state of the map
+        break;
+
+    case CommandType::INFO:
+        // Implement logic to display game information
+        break;
+
+    case CommandType::QUIT:
+        // Implement logic to end the game
+        break;
+
+    case CommandType::INVALID:
+        // Handle invalid command type
+        std::cout << "Invalid command!" << std::endl;
+        break;
+
+    case CommandType::WRONG_PARAM:
+        // Handle command with wrong parameters
+        std::cout << "Command with wrong parameters!" << std::endl;
+        break;
+    }
 }
 
 bool Game::isRunning()
