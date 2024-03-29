@@ -2,6 +2,9 @@
 #include "Utils.hpp"
 #include <iostream>
 #include <fstream>
+#include <string>
+
+#define CONFIG_MAGIC_NUMBER "OOP\n"
 
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
@@ -40,7 +43,10 @@ int Game::getRoundNumber(char *string)
 bool Game::isValidConfig(char *config_path)
 {
     std::ifstream file(config_path);
-    return file.is_open();
+    std::string magic_number;
+    std::getline(file, magic_number);
+
+    return file.is_open() && magic_number == CONFIG_MAGIC_NUMBER;
 }
 
 void Game::start()

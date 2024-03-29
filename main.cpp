@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     std::cout << "[ERROR] Invalid file!" << std::endl;
     return INVALID_FILE;
   }
-  
+
   Game game(rounds, argv[2]);
   game.start();
 
@@ -62,4 +62,3 @@ int main(int argc, char *argv[])
 
   return SUCCESSFUL;
 }
-
