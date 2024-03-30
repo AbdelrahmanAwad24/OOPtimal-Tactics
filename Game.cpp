@@ -9,14 +9,12 @@
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
       current_round_(1), max_rounds_(maximum_rounds), phase_(Phase::PLACEMENT),
-      active_player_(nullptr)
+      active_player_(player_a_)
 {
     Player *player_a = new Player('A');
     setPlayerA(player_a);
     Player *player_b = new Player('B');
     setPlayerB(player_b);
-    // player_a_ = new Player('A');
-    // player_b_ = new Player('B');
 
     // Initialize map
     Map *map = new Map(config_path, player_a_, player_b_);

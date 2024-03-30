@@ -20,6 +20,12 @@ Map::Map(char *config_path, Player *player_a, Player *player_b)
     columns_ = line.at(0) - '0'; // convert char int to tint
     rows_ = line.at(2) - '0';
 
+    fields_.resize(rows_);
+    for (int i = 0; i < rows_; ++i)
+    {
+        fields_[i].resize(columns_);
+    }
+
     while (std::getline(configFile, line))
     {
         std::vector<char> column;
@@ -29,8 +35,8 @@ Map::Map(char *config_path, Player *player_a, Player *player_b)
         }
         row.push_back(column);
     }
-    std::cout << "  |";
 
+    std::cout << "  |";
     for (int i = 1; i < columns_; i++)
     {
         std::cout << " " << i << " |";
@@ -40,63 +46,31 @@ Map::Map(char *config_path, Player *player_a, Player *player_b)
     for (size_t i = 0; i < row.size(); ++i)
     {
         std::vector<char> &column = row.at(i);
-        std::cout << i + 1 << " |";
-        for (size_t j = 0; j < column.size() - 1; j++)
+        std::cout << i + 1 << " ";
+        for (size_t j = 0; j < column.size(); j++)
         {
-            if (column.at(j) == '0')
+            std::cout << "|";
+            Player *player = nullptr;
+            int chips = 0;
+            bool is_water = false;
+            if (column.at(j) == 'a')
             {
-                std::cout << "   |";
-            }
-            else if (column.at(j) == 'a')
-            {
-                std::cout << "A 1|";
+                chips = 1;
+                player = player_a;
             }
             else if (column.at(j) == 'b')
             {
-                std::cout << "B 1|";
+                chips = 1;
+                player = player_b;
             }
             else if (column.at(j) == '-')
             {
-                std::cout << " ~ |";
+                is_water = true;
             }
+            Field *field = new Field(player, chips, is_water);
         }
-        if (column.at(columns_ - 1) == '0')
-        {
-            std::cout << "   " << std::endl;
-        }
-        else if (column.at(columns_ - 1) == 'a')
-        {
-            std::cout << "A 1" << std::endl;
-        }
-        else if (column.at(columns_ - 1) == 'b')
-        {
-            std::cout << "B 1" << std::endl;
-        }
-        else if (column.at(columns_ - 1) == '-')
-        {
-            std::cout << " ~ " << std::endl;
-        }
+        std::cout << std::endl;
     }
-
-    // if (configFile.is_open())
-    // {
-
-    // for (int i = 0; i < rows_; ++i)
-    // {
-    //     // fields_[i].resize(columns_);
-    //     for (int j = 0; j < columns_; ++j)
-    //         {
-    //             fields_[i][j] = new Field(nullptr, 0, false);
-    //             std::cout << "1" << std::endl;
-    //         }
-    //         std::cout << "\n";
-    //     }
-    //     std::cout << rows_ << std::endl;
-    // }
-    // else
-    // {
-    //     std::cout << "Error: Unable to open config file." << std::endl;
-    // }
 }
 
 Map::~Map()

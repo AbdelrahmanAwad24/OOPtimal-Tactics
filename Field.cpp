@@ -2,7 +2,22 @@
 
 #include <iostream>
 
-Field::Field(Player *player, int chips, bool is_water) : player_(player), chips_(chips), is_water_(is_water) {}
+Field::Field(Player *player, int chips, bool is_water) : player_(player), chips_(chips), is_water_(is_water)
+{
+    if (is_water_)
+    {
+        std::cout << " ~ ";
+    }
+    else if (player)
+    {
+        std::cout
+            << player->getId() << " " << chips_;
+    }
+    else
+    {
+        std::cout << "   ";
+    }
+}
 
 Field::~Field() {}
 
