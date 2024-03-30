@@ -16,6 +16,7 @@ private:
 public:
     Map(char *config_path, Player *player_a, Player *player_b);
     Map(const Map &other) = delete;
+    Map() = default;
     ~Map();
 
     void setColumns(int columns);

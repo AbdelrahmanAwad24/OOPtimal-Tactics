@@ -8,9 +8,19 @@
 
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
-      current_round_(0), max_rounds_(maximum_rounds), phase_(Phase::PLACEMENT),
+      current_round_(1), max_rounds_(maximum_rounds), phase_(Phase::PLACEMENT),
       active_player_(nullptr)
 {
+    Player *player_a = new Player('A');
+    setPlayerA(player_a);
+    Player *player_b = new Player('B');
+    setPlayerB(player_b);
+    // player_a_ = new Player('A');
+    // player_b_ = new Player('B');
+
+    // Initialize map
+    Map *map = new Map(config_path, player_a_, player_b_);
+    setMap(map);
 }
 
 Game::~Game()
@@ -50,8 +60,11 @@ bool Game::isValidConfig(char *config_path)
 
 void Game::start()
 {
-    // Implementation to start the game
     std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of <ROUNDS> round(s) !" << std::endl;
+    std::cout << "\n------------------\nRound 1/2 starts!\n------------------\n"
+              << std::endl;
+    // std::cout << map_->getColumns() << std::endl;
+    // std::cout << map_->getColumns() << std::endl;
 }
 
 void Game::execute(Command command)
@@ -60,6 +73,8 @@ void Game::execute(Command command)
     {
     case CommandType::PLACE:
         // Implement logic to handle placing chips on the map
+        std::cout << map_->getColumns() << std::endl;
+
         break;
 
     case CommandType::PASS:

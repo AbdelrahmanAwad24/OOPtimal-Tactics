@@ -1,30 +1,102 @@
 #include "Map.hpp"
+#include "Utils.hpp"
 #include <fstream>
 #include <iostream>
 
 Map::Map(char *config_path, Player *player_a, Player *player_b)
     : columns_(0), rows_(0), output_active_(false)
 {
-    // Initialize map components based on config_path
     std::ifstream configFile(config_path);
-    if (configFile.is_open())
+    if (!configFile.is_open())
     {
-        configFile >> rows_ >> columns_;
-        fields_.resize(rows_);
-        for (int i = 0; i < rows_; ++i)
+        std::cout << "Error: Unable to open config file." << std::endl;
+    }
+
+    std::vector<std::vector<char>> row;
+    std::string line;
+    std::getline(configFile, line);
+    std::getline(configFile, line);
+
+    columns_ = line.at(0) - '0'; // convert char int to tint
+    rows_ = line.at(2) - '0';
+
+    while (std::getline(configFile, line))
+    {
+        std::vector<char> column;
+        for (auto c : line)
         {
-            fields_[i].resize(columns_);
-            for (int j = 0; j < columns_; ++j)
+            column.push_back(c);
+        }
+        row.push_back(column);
+    }
+    std::cout << "  |";
+
+    for (int i = 1; i < columns_; i++)
+    {
+        std::cout << " " << i << " |";
+    }
+    std::cout << " " << columns_ << " " << std::endl;
+
+    for (size_t i = 0; i < row.size(); ++i)
+    {
+        std::vector<char> &column = row.at(i);
+        std::cout << i + 1 << " |";
+        for (size_t j = 0; j < column.size() - 1; j++)
+        {
+            if (column.at(j) == '0')
             {
-                fields_[i][j] = new Field(nullptr, 0, false);
+                std::cout << "   |";
+            }
+            else if (column.at(j) == 'a')
+            {
+                std::cout << "A 1|";
+            }
+            else if (column.at(j) == 'b')
+            {
+                std::cout << "B 1|";
+            }
+            else if (column.at(j) == '-')
+            {
+                std::cout << " ~ |";
             }
         }
-        // configFile.close();
+        if (column.at(columns_ - 1) == '0')
+        {
+            std::cout << "   " << std::endl;
+        }
+        else if (column.at(columns_ - 1) == 'a')
+        {
+            std::cout << "A 1" << std::endl;
+        }
+        else if (column.at(columns_ - 1) == 'b')
+        {
+            std::cout << "B 1" << std::endl;
+        }
+        else if (column.at(columns_ - 1) == '-')
+        {
+            std::cout << " ~ " << std::endl;
+        }
     }
-    else
-    {
-        std::cerr << "Error: Unable to open config file." << std::endl;
-    }
+
+    // if (configFile.is_open())
+    // {
+
+    // for (int i = 0; i < rows_; ++i)
+    // {
+    //     // fields_[i].resize(columns_);
+    //     for (int j = 0; j < columns_; ++j)
+    //         {
+    //             fields_[i][j] = new Field(nullptr, 0, false);
+    //             std::cout << "1" << std::endl;
+    //         }
+    //         std::cout << "\n";
+    //     }
+    //     std::cout << rows_ << std::endl;
+    // }
+    // else
+    // {
+    //     std::cout << "Error: Unable to open config file." << std::endl;
+    // }
 }
 
 Map::~Map()
@@ -46,7 +118,7 @@ void Map::setColumns(int columns)
 
 int Map::getColumns()
 {
-    return 0;
+    return columns_;
 }
 
 void Map::setRows(int rows)
