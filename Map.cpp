@@ -4,7 +4,7 @@
 #include <iostream>
 
 Map::Map(char *config_path, Player *player_a, Player *player_b)
-    : columns_(0), rows_(0), output_active_(false)
+    : columns_(0), rows_(0), output_active_(false), counter_(0)
 {
     std::ifstream configFile(config_path);
     if (!configFile.is_open())
@@ -46,6 +46,7 @@ Map::Map(char *config_path, Player *player_a, Player *player_b)
             {
                 player = player_a;
                 chips = 1;
+                counter_++;
             }
             else if (symbol == 'b')
             {
@@ -92,6 +93,7 @@ void Map::printMap()
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl;
 }
 void Map::setColumns(int columns)
 {
@@ -101,6 +103,16 @@ void Map::setColumns(int columns)
 int Map::getColumns()
 {
     return columns_;
+}
+
+void Map::setCounter(int counter)
+{
+    counter_ = counter;
+}
+
+int Map::getCounter()
+{
+    return counter_;
 }
 
 void Map::setRows(int rows)

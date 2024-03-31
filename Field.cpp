@@ -51,6 +51,8 @@ void Field::setIsWater(bool isWater)
     is_water_ = isWater;
 }
 
+// int Field::counter = 0;
+
 void Field::printField()
 {
     if (isWater())
@@ -61,6 +63,7 @@ void Field::printField()
     {
         std::cout
             << getPlayer()->getId() << " " << chips_;
+        // counter++;
     }
     else
     {

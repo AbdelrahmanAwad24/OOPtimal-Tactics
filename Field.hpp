@@ -11,6 +11,7 @@ private:
     Player *player_;
     int chips_;
     bool is_water_;
+    // static int counter;
 
 public:
     Field(Player *player, int chips, bool is_water);

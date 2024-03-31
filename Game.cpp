@@ -3,19 +3,20 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cmath>
 
 #define CONFIG_MAGIC_NUMBER "OOP"
 
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
       current_round_(1), max_rounds_(maximum_rounds), phase_(Phase::PLACEMENT),
-      active_player_(player_a_)
+      active_player_(nullptr)
 {
     Player *player_a = new Player('A');
     setPlayerA(player_a);
     Player *player_b = new Player('B');
     setPlayerB(player_b);
-
+    setActivePlayer(player_a);
     map_ = new Map(config_path, player_a_, player_b_);
     // setMap(map_);
 }
@@ -54,24 +55,32 @@ bool Game::isValidConfig(char *config_path)
     std::getline(file, magic_number);
     return file.is_open() && magic_number == CONFIG_MAGIC_NUMBER;
 }
+int Game::toggle = 1;
+void Game::placmentPhase()
+{
+    std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
+    map_->printMap();
+    std::cout << "Player " << getActivePlayer()->getId() << ", you have " << getActivePlayer()->getChips() << " chip(s) left, where and how do you want to place your chips ? " << std::endl;
+}
 
 void Game::start()
 {
-    std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of " << max_rounds_ << "round(s) !" << std::endl;
-    std::cout << "\n------------------\nRound 1/" << max_rounds_ << " starts!\n------------------\n";
-    std::cout << "\n------------------\nPlacement Phase\n------------------\n"
-              << std::endl;
-    map_->printMap();
+    std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of " << max_rounds_ << " round(s)!" << std::endl;
+    std::cout << "\n------------------\nRound 1/" << max_rounds_ << " starts!\n------------------" << std::endl;
+    double gained_chips = std::ceil(map_->getCounter() / 3.0);
+    player_a_->setChips(gained_chips);
+    player_b_->setChips(gained_chips);
+    // std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
+    // map_->printMap();
 }
 
 void Game::execute(Command command)
 {
+
     switch (command.getType())
     {
     case CommandType::PLACE:
-        // Implement logic to handle placing chips on the map
         std::cout << map_->getColumns() << std::endl;
-
         break;
 
     case CommandType::PASS:
@@ -116,8 +125,22 @@ void Game::execute(Command command)
     }
 }
 
+int Game::toggle_flag = 0;
 bool Game::isRunning()
 {
+    // if (toggle_flag)
+    // {
+    //     placmentPhase();
+    //     // toggle_flag = !toggle_flag;
+    //     toggle = !toggle;
+    // }
+    // else if (!toggle_flag)
+    // {
+    //     placmentPhaseRev();
+    //     toggle_flag = !toggle_flag;
+    // }
+
+    placmentPhase();
     return phase_ != Phase::END;
 }
 

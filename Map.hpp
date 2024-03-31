@@ -12,6 +12,7 @@ private:
     int rows_;
     std::vector<std::vector<Field *>> fields_;
     bool output_active_;
+    int counter_;
 
 public:
     Map(char *config_path, Player *player_a, Player *player_b);
@@ -22,6 +23,8 @@ public:
     void printMap();
     void setColumns(int columns);
     int getColumns();
+    void setCounter(int counter);
+    int getCounter();
     void setRows(int rows);
     int getRows();
     void setFields(const std::vector<std::vector<Field *>> &fields);

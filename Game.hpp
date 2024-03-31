@@ -6,6 +6,7 @@
 #include "Map.hpp"
 #include "Player.hpp"
 #include "Command.hpp"
+#include "CommandLine.hpp"
 
 enum class Phase
 {
@@ -24,6 +25,8 @@ private:
     int max_rounds_;
     Phase phase_;
     Player *active_player_;
+    static int toggle;
+    static int toggle_flag;
 
 public:
     Game(int maximum_rounds, char *config_path);
@@ -54,6 +57,8 @@ public:
     void setPhase(Phase phase);
     Player *getActivePlayer();
     void setActivePlayer(Player *player);
+    void placmentPhase();
+    void placmentPhaseRev();
 };
 
 #endif
