@@ -57,8 +57,9 @@ bool Game::isValidConfig(char *config_path)
 
 void Game::start()
 {
-    std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of <ROUNDS> round(s) !" << std::endl;
-    std::cout << "\n------------------\nRound 1/2 starts!\n------------------\n"
+    std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of " << max_rounds_ << "round(s) !" << std::endl;
+    std::cout << "\n------------------\nRound 1/" << max_rounds_ << " starts!\n------------------\n";
+    std::cout << "\n------------------\nPlacement Phase\n------------------\n"
               << std::endl;
     map_->printMap();
 }

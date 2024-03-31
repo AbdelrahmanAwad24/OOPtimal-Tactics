@@ -11,6 +11,10 @@ Command::Command(std::vector<std::string> &input)
     else
     {
         std::string commandTypeString = input[0];
+        for (char &c : commandTypeString)
+        {
+            c = std::toupper(c);
+        }
         if (commandTypeString == "PLACE")
         {
             type_ = CommandType::PLACE;
