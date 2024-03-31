@@ -39,6 +39,7 @@ public:
     bool isRunning();
 
     // Getters and setters
+    void intializeMap();
     Map *getMap();
     void setMap(Map *map);
     Player *getPlayerA();

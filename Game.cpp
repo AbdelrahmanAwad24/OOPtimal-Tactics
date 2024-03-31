@@ -16,9 +16,8 @@ Game::Game(int maximum_rounds, char *config_path)
     Player *player_b = new Player('B');
     setPlayerB(player_b);
 
-    // Initialize map
-    Map *map = new Map(config_path, player_a_, player_b_);
-    setMap(map);
+    map_ = new Map(config_path, player_a_, player_b_);
+    // setMap(map_);
 }
 
 Game::~Game()
@@ -61,8 +60,7 @@ void Game::start()
     std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of <ROUNDS> round(s) !" << std::endl;
     std::cout << "\n------------------\nRound 1/2 starts!\n------------------\n"
               << std::endl;
-    // std::cout << map_->getColumns() << std::endl;
-    // std::cout << map_->getColumns() << std::endl;
+    map_->printMap();
 }
 
 void Game::execute(Command command)
@@ -77,22 +75,32 @@ void Game::execute(Command command)
 
     case CommandType::PASS:
         // Implement logic to handle passing the turn
+        std::cout << "Pass command!" << std::endl;
+
         break;
 
     case CommandType::MOVE:
         // Implement logic to handle moving chips on the map
+        std::cout << "Move command!" << std::endl;
+
         break;
 
     case CommandType::MAP:
         // Implement logic to display the current state of the map
+        std::cout << "Map command!" << std::endl;
+
         break;
 
     case CommandType::INFO:
         // Implement logic to display game information
+        std::cout << "Info command!" << std::endl;
+
         break;
 
     case CommandType::QUIT:
         // Implement logic to end the game
+        std::cout << "Quit command!" << std::endl;
+
         break;
 
     case CommandType::INVALID:

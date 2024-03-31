@@ -19,6 +19,7 @@ public:
     Map() = default;
     ~Map();
 
+    void printMap();
     void setColumns(int columns);
     int getColumns();
     void setRows(int rows);

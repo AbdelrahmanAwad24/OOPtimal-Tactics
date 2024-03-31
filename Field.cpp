@@ -4,19 +4,19 @@
 
 Field::Field(Player *player, int chips, bool is_water) : player_(player), chips_(chips), is_water_(is_water)
 {
-    if (is_water_)
-    {
-        std::cout << " ~ ";
-    }
-    else if (player)
-    {
-        std::cout
-            << player->getId() << " " << chips_;
-    }
-    else
-    {
-        std::cout << "   ";
-    }
+    // if (is_water_)
+    // {
+    //     std::cout << " ~ ";
+    // }
+    // else if (player)
+    // {
+    //     std::cout
+    //         << player->getId() << " " << chips_;
+    // }
+    // else
+    // {
+    //     std::cout << "   ";
+    // }
 }
 
 Field::~Field() {}
@@ -49,4 +49,21 @@ bool Field::isWater()
 void Field::setIsWater(bool isWater)
 {
     is_water_ = isWater;
+}
+
+void Field::printField()
+{
+    if (isWater())
+    {
+        std::cout << " ~ ";
+    }
+    else if (getPlayer())
+    {
+        std::cout
+            << getPlayer()->getId() << " " << chips_;
+    }
+    else
+    {
+        std::cout << "   ";
+    }
 }

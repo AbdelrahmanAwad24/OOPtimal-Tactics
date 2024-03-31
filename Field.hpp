@@ -22,6 +22,7 @@ public:
     void setChips(int chips);
     bool isWater();
     void setIsWater(bool isWater);
+    void printField();
 };
 
 #endif
