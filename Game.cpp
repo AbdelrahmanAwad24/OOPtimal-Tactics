@@ -55,12 +55,27 @@ bool Game::isValidConfig(char *config_path)
     std::getline(file, magic_number);
     return file.is_open() && magic_number == CONFIG_MAGIC_NUMBER;
 }
+
 int Game::toggle = 1;
 void Game::placmentPhase()
 {
     std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
-    map_->printMap();
+    if (toggle)
+    {
+        map_->printMap();
+    }
+
     std::cout << "Player " << getActivePlayer()->getId() << ", you have " << getActivePlayer()->getChips() << " chip(s) left, where and how do you want to place your chips ? " << std::endl;
+}
+
+void Game::movementPhase()
+{
+    std::cout << "\n------------------\nMovement Phase\n------------------" << std::endl;
+    if (toggle)
+    {
+        map_->printMap();
+    }
+    std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do ? " << std::endl;
 }
 
 void Game::start()
@@ -84,9 +99,7 @@ void Game::execute(Command command)
         break;
 
     case CommandType::PASS:
-        // Implement logic to handle passing the turn
         std::cout << "Pass command!" << std::endl;
-
         break;
 
     case CommandType::MOVE:
@@ -96,7 +109,7 @@ void Game::execute(Command command)
         break;
 
     case CommandType::MAP:
-        // Implement logic to display the current state of the map
+        toggle = 0;
         std::cout << "Map command!" << std::endl;
 
         break;
@@ -122,6 +135,21 @@ void Game::execute(Command command)
         // Handle command with wrong parameters
         std::cout << "Command with wrong parameters!" << std::endl;
         break;
+    }
+    if (phase_ == Phase::PLACEMENT)
+    {
+        setActivePlayer(player_b_);
+    }
+    if (phase_ == Phase::MOVEMENT)
+    {
+        if (active_player_ == player_a_)
+        {
+            setActivePlayer(player_b_);
+        }
+        else
+        {
+            setActivePlayer(player_a_);
+        }
     }
 }
 

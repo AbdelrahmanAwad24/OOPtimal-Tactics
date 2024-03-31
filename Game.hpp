@@ -58,7 +58,7 @@ public:
     Player *getActivePlayer();
     void setActivePlayer(Player *player);
     void placmentPhase();
-    void placmentPhaseRev();
+    void movementPhase();
 };
 
 #endif
