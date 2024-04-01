@@ -67,39 +67,6 @@ bool Game::isValidConfig(char *config_path)
     return file.is_open() && magic_number == CONFIG_MAGIC_NUMBER;
 }
 
-int Game::toggle = 1;
-int Game::placement_counter = 0;
-int Game::movement_counter = 1;
-
-void Game::placmentPhase()
-{
-    if (toggle)
-    {
-        map_->printMap();
-    }
-    std::cout << "Player " << getActivePlayer()->getId() << ", you have " << getActivePlayer()->getChips() << " chip(s) left, where and how do you want to place your chips?" << std::endl;
-    placement_counter++;
-    if (placement_counter == 2)
-    {
-        setPhase(Phase::MOVEMENT);
-        placement_counter = 0;
-    }
-}
-
-void Game::movementPhase()
-{
-    if (toggle)
-    {
-        map_->printMap();
-    }
-    std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do?" << std::endl;
-    if (movement_counter == 4)
-    {
-        setPhase(Phase::MOVEMENT);
-        movement_counter = 1;
-    }
-}
-
 void Game::start()
 {
     std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of " << max_rounds_ << " round(s)!" << std::endl;
@@ -203,9 +170,41 @@ void Game::execute(Command command)
     }
 }
 
+int Game::toggle = 1;
+int Game::placement_counter = 0;
+int Game::movement_counter = 1;
+
+void Game::placmentPhase()
+{
+    std::cout << "Player " << getActivePlayer()->getId() << ", you have " << getActivePlayer()->getChips() << " chip(s) left, where and how do you want to place your chips?" << std::endl;
+    placement_counter++;
+    if (placement_counter == 2)
+    {
+        setPhase(Phase::MOVEMENT);
+        placement_counter = 0;
+    }
+}
+
+void Game::movementPhase()
+{
+    std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do?" << std::endl;
+    if (movement_counter == 4)
+    {
+        setPhase(Phase::MOVEMENT);
+        movement_counter = 1;
+    }
+}
+
+void Game::endGame()
+{
+    std::cout << "------------------\nGAME END !\n\nPlayer A claimed 1 field(s)" << std::endl;
+    std::cout << " !Player B claimed 2 field(s) !\n\nCongratulations, Player B !You won !" << std::endl;
+}
+
 int Game::toggle_flag = 0;
 int Game::placement_header = 1;
 int Game::movement_header = 1;
+
 bool Game::isRunning()
 {
     if (phase_ == Phase::PLACEMENT)
@@ -213,6 +212,10 @@ bool Game::isRunning()
         if (placement_header)
         {
             std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
+            if (toggle)
+            {
+                map_->printMap();
+            }
             placement_header = 0;
         }
         placmentPhase();
@@ -223,11 +226,16 @@ bool Game::isRunning()
         if (movement_header)
         {
             std::cout << "\n------------------\nMovement Phase\n------------------" << std::endl;
+            if (toggle)
+            {
+                map_->printMap();
+            }
             movement_header = 0;
         }
         movementPhase();
         toggleActivePlayer();
     }
+    endGame();
     return phase_ != Phase::END;
 }
 
