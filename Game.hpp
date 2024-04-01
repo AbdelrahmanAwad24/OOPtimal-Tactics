@@ -27,6 +27,10 @@ private:
     Player *active_player_;
     static int toggle;
     static int toggle_flag;
+    static int placement_header;
+    static int placement_counter;
+    static int movement_header;
+    static int movement_counter;
 
 public:
     Game(int maximum_rounds, char *config_path);
@@ -59,6 +63,7 @@ public:
     void setActivePlayer(Player *player);
     void placmentPhase();
     void movementPhase();
+    void toggleActivePlayer();
 };
 
 #endif

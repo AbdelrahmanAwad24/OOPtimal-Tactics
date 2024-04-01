@@ -27,6 +27,17 @@ Game::~Game()
     delete player_a_;
     delete player_b_;
 }
+void Game::toggleActivePlayer()
+{
+    if (active_player_ == player_a_)
+    {
+        setActivePlayer(player_b_);
+    }
+    else
+    {
+        setActivePlayer(player_a_);
+    }
+}
 
 bool Game::isValidRoundNumber(int rounds)
 {
@@ -57,25 +68,36 @@ bool Game::isValidConfig(char *config_path)
 }
 
 int Game::toggle = 1;
+int Game::placement_counter = 0;
+int Game::movement_counter = 1;
+
 void Game::placmentPhase()
 {
-    std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
     if (toggle)
     {
         map_->printMap();
     }
-
-    std::cout << "Player " << getActivePlayer()->getId() << ", you have " << getActivePlayer()->getChips() << " chip(s) left, where and how do you want to place your chips ? " << std::endl;
+    std::cout << "Player " << getActivePlayer()->getId() << ", you have " << getActivePlayer()->getChips() << " chip(s) left, where and how do you want to place your chips?" << std::endl;
+    placement_counter++;
+    if (placement_counter == 2)
+    {
+        setPhase(Phase::MOVEMENT);
+        placement_counter = 0;
+    }
 }
 
 void Game::movementPhase()
 {
-    std::cout << "\n------------------\nMovement Phase\n------------------" << std::endl;
     if (toggle)
     {
         map_->printMap();
     }
-    std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do ? " << std::endl;
+    std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do?" << std::endl;
+    if (movement_counter == 4)
+    {
+        setPhase(Phase::MOVEMENT);
+        movement_counter = 1;
+    }
 }
 
 void Game::start()
@@ -95,80 +117,81 @@ void Game::execute(Command command)
     switch (command.getType())
     {
     case CommandType::PLACE:
-        std::cout << map_->getColumns() << std::endl;
+        // std::cout << map_->getColumns() << std::endl;
         break;
 
     case CommandType::PASS:
-        std::cout << "Pass command!" << std::endl;
+        // std::cout << "Pass command!" << std::endl;
         break;
 
     case CommandType::MOVE:
         // Implement logic to handle moving chips on the map
-        std::cout << "Move command!" << std::endl;
+        // std::cout << "Move command!" << std::endl;
 
         break;
 
     case CommandType::MAP:
-        toggle = 0;
-        std::cout << "Map command!" << std::endl;
+        toggle = !toggle;
+        // std::cout << "Map command!" << std::endl;
 
         break;
 
     case CommandType::INFO:
         // Implement logic to display game information
-        std::cout << "Info command!" << std::endl;
+        // std::cout << "Info command!" << std::endl;
 
         break;
 
     case CommandType::QUIT:
         // Implement logic to end the game
-        std::cout << "Quit command!" << std::endl;
+        // std::cout << "Quit command!" << std::endl;
 
         break;
 
     case CommandType::INVALID:
         // Handle invalid command type
-        std::cout << "Invalid command!" << std::endl;
         break;
 
     case CommandType::WRONG_PARAM:
         // Handle command with wrong parameters
-        std::cout << "Command with wrong parameters!" << std::endl;
         break;
     }
     if (phase_ == Phase::PLACEMENT)
     {
         setActivePlayer(player_b_);
+        // placmentPhase();
+        // setPhase(Phase::MOVEMENT);
     }
     if (phase_ == Phase::MOVEMENT)
     {
-        if (active_player_ == player_a_)
-        {
-            setActivePlayer(player_b_);
-        }
-        else
-        {
-            setActivePlayer(player_a_);
-        }
+        // toggleActivePlayer();
     }
 }
 
 int Game::toggle_flag = 0;
+int Game::placement_header = 1;
+int Game::movement_header = 1;
 bool Game::isRunning()
 {
-    // if (toggle_flag)
-    // {
-    //     placmentPhase();
-    //     // toggle_flag = !toggle_flag;
-    //     toggle = !toggle;
-    // }
-    // else if (!toggle_flag)
-    // {
-    //     placmentPhaseRev();
-    //     toggle_flag = !toggle_flag;
-    // }
-
-    placmentPhase();
+    if (phase_ == Phase::PLACEMENT)
+    {
+        if (placement_header)
+        {
+            std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
+            placement_header = 0;
+        }
+        placmentPhase();
+        // setActivePlayer(player_b_);
+    }
+    else if (phase_ == Phase::MOVEMENT)
+    {
+        if (movement_header)
+        {
+            std::cout << "\n------------------\nMovement Phase\n------------------" << std::endl;
+            movement_header = 0;
+        }
+        movementPhase();
+    }
     return phase_ != Phase::END;
 }
 
