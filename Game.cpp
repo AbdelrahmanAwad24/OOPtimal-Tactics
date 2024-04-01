@@ -107,8 +107,41 @@ void Game::start()
     double gained_chips = std::ceil(map_->getCounter() / 3.0);
     player_a_->setChips(gained_chips);
     player_b_->setChips(gained_chips);
-    // std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
+    //  map_->getFields(fiel)
+    // std::cout << fol << std::endl;
     // map_->printMap();
+}
+
+void Game::handlePlace(Command command)
+{
+    if (phase_ == Phase::PLACEMENT)
+    {
+        if (command.getParameters().size() == 3)
+        {
+            int column = std::stoi(command.getParameters()[0]);
+            int row = std::stoi(command.getParameters()[1]);
+            int chips = std::stoi(command.getParameters()[2]);
+
+            // Check if the provided column and row are within bounds of the map
+            if (column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows())
+            {
+                // Place chips at the specified column and row for the active player
+                map_->placeChips(column - 1, row - 1, chips, active_player_);
+            }
+            else
+            {
+                std::cout << "Invalid column or row number!" << std::endl;
+            }
+        }
+        else
+        {
+            std::cout << "Wrong number of parameters for PLACE command!" << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "PLACE command can only be executed during the PLACEMENT phase!" << std::endl;
+    }
 }
 
 void Game::execute(Command command)
@@ -191,6 +224,7 @@ bool Game::isRunning()
             movement_header = 0;
         }
         movementPhase();
+        toggleActivePlayer();
     }
     return phase_ != Phase::END;
 }

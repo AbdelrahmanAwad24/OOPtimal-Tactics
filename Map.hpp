@@ -31,6 +31,7 @@ public:
     std::vector<std::vector<Field *>> &getFields();
     void setOutputActive(bool output_active);
     bool isOutputActive();
+    void placeChips(int column, int row, int chips, Player *player);
 };
 
 #endif

@@ -24,20 +24,12 @@ Map::Map(char *config_path, Player *player_a, Player *player_b)
         row.resize(columns_);
     }
 
-    // std::cout << "  |"; //!
-    // for (int i = 1; i < columns_; i++)
-    // {
-    //     std::cout << " " << i << " |";
-    // }
-    // std::cout << " " << columns_ << " " << std::endl;//!
-
     for (int i = 0; i < rows_; ++i)
     {
         // std::cout << i + 1 << " ";
         std::getline(configFile, line);
         for (int j = 0; j < columns_; ++j)
         {
-            // std::cout << "|";
             Player *player = nullptr;
             int chips = 0;
             bool is_water = false;
@@ -100,6 +92,21 @@ void Map::setColumns(int columns)
     columns_ = columns;
 }
 
+void Map::placeChips(int column, int row, int chips, Player *player)
+{
+    if (column >= 0 && column < columns_ && row >= 0 && row < rows_)
+    {
+        // Update the number of chips in the specified field for the given player
+        fields_[row][column]->setPlayer(player);
+        fields_[row][column]->setChips(chips);
+        counter_ += chips; // Increment the counter for the total number of chips on the map
+    }
+    else
+    {
+        std::cout << "Invalid column or row number!" << std::endl;
+    }
+}
+
 int Map::getColumns()
 {
     return columns_;
@@ -127,6 +134,7 @@ int Map::getRows()
 
 void Map::setFields(const std::vector<std::vector<Field *>> &fields)
 {
+
     fields_ = fields;
 }
 
