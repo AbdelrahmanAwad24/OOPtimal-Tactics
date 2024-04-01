@@ -137,10 +137,16 @@ void Game::handleMove(Command command)
                 map_->printMap();
                 toggleActivePlayer();
                 movement_counter++;
-                if (movement_counter == 4)
+                if (player_a_->hasPassed() && player_b_->hasPassed())
                 {
-                    setPhase(Phase::PLACEMENT);
-                    movement_counter = 0;
+                    if (current_round_ == max_rounds_)
+                    {
+                        setPhase(Phase::END);
+                    }
+                    else
+                    {
+                        setPhase(Phase::PLACEMENT);
+                    }
                 }
             }
             else
@@ -159,6 +165,14 @@ void Game::handleMove(Command command)
     }
 }
 
+void Game::handlePass()
+{
+    if (phase_ == Phase::MOVEMENT)
+    {
+        active_player_->setPassed(true);
+    }
+}
+
 void Game::execute(Command command)
 {
 
@@ -170,7 +184,7 @@ void Game::execute(Command command)
         break;
 
     case CommandType::PASS:
-        // std::cout << "Pass command!" << std::endl;
+        handlePass();
         break;
 
     case CommandType::MOVE:

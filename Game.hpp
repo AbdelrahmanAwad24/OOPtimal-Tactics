@@ -67,6 +67,7 @@ public:
     void endGame();
     void handlePlace(Command command);
     void handleMove(Command command);
+    void handlePass();
 };
 
 #endif
