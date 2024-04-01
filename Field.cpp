@@ -36,6 +36,11 @@ void Field::setChips(int chips)
     chips_ = chips_ + chips;
 }
 
+void Field::removeChips(int chips)
+{
+    chips_ = chips_ - chips;
+}
+
 int Field::getChips()
 {
     return chips_;

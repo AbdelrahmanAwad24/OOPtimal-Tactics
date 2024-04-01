@@ -24,6 +24,7 @@ public:
     bool isWater();
     void setIsWater(bool isWater);
     void printField();
+    void removeChips(int chips);
 };
 
 #endif

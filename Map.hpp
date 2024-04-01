@@ -32,6 +32,7 @@ public:
     void setOutputActive(bool output_active);
     bool isOutputActive();
     void placeChips(int column, int row, int chips, Player *player);
+    void moveChips(int column, int row, int chips);
 };
 
 #endif

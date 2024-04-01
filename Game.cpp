@@ -88,13 +88,18 @@ void Game::handlePlace(Command command)
             int chips = std::stoi(command.getParameters()[0]);
             int column = std::stoi(command.getParameters()[1]);
             int row = std::stoi(command.getParameters()[2]);
-            // std::cout << chips << column << row << std::endl;
             // Check if the provided column and row are within bounds of the map
             if (column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows())
             {
                 // Place chips at the specified column and row for the active player
                 map_->placeChips(column - 1, row - 1, chips, active_player_);
                 map_->printMap();
+                placement_counter++;
+                if (placement_counter == 2)
+                {
+                    setPhase(Phase::MOVEMENT);
+                    placement_counter = 0;
+                }
             }
             else
             {
@@ -109,6 +114,47 @@ void Game::handlePlace(Command command)
     else
     {
         std::cout << "PLACE command can only be executed during the PLACEMENT phase!" << std::endl;
+    }
+}
+
+void Game::handleMove(Command command)
+{
+    if (phase_ == Phase::MOVEMENT)
+    {
+        if (command.getParameters().size() == 5)
+        {
+            int chips = std::stoi(command.getParameters()[0]);
+            int column = std::stoi(command.getParameters()[1]);
+            int row = std::stoi(command.getParameters()[2]);
+            int new_column = std::stoi(command.getParameters()[3]);
+            int new_row = std::stoi(command.getParameters()[4]);
+            // Check if the provided column and row are within bounds of the map
+            if ((column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows()) && (new_column >= 1 && new_column <= map_->getColumns() && new_row >= 1 && new_row <= map_->getRows()))
+            {
+                // Place chips at the specified column and row for the active player
+                map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
+                map_->moveChips(column - 1, row - 1, chips);
+                map_->printMap();
+                placement_counter++;
+                if (placement_counter == 2)
+                {
+                    setPhase(Phase::MOVEMENT);
+                    placement_counter = 0;
+                }
+            }
+            else
+            {
+                std::cout << "Invalid column or row number!" << std::endl;
+            }
+        }
+        else
+        {
+            std::cout << "Wrong number of parameters for MOVE command!" << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "MOVE command can only be executed during the PLACEMENT phase!" << std::endl;
     }
 }
 
@@ -172,17 +218,11 @@ void Game::execute(Command command)
 
 int Game::toggle = 1;
 int Game::placement_counter = 0;
-int Game::movement_counter = 1;
+int Game::movement_counter = 0;
 
 void Game::placmentPhase()
 {
     std::cout << "Player " << getActivePlayer()->getId() << ", you have " << getActivePlayer()->getChips() << " chip(s) left, where and how do you want to place your chips?" << std::endl;
-    placement_counter++;
-    if (placement_counter == 2)
-    {
-        setPhase(Phase::MOVEMENT);
-        placement_counter = 0;
-    }
 }
 
 void Game::movementPhase()
@@ -190,8 +230,8 @@ void Game::movementPhase()
     std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do?" << std::endl;
     if (movement_counter == 4)
     {
-        setPhase(Phase::MOVEMENT);
-        movement_counter = 1;
+        setPhase(Phase::PLACEMENT);
+        movement_counter = 0;
     }
 }
 
@@ -225,7 +265,7 @@ bool Game::isRunning()
     {
         if (movement_header)
         {
-            std::cout << "\n------------------\nMovement Phase\n------------------" << std::endl;
+            std::cout << "------------------\nMovement Phase\n------------------" << std::endl;
             if (toggle)
             {
                 map_->printMap();
@@ -235,7 +275,7 @@ bool Game::isRunning()
         movementPhase();
         toggleActivePlayer();
     }
-    endGame();
+    // endGame();
     return phase_ != Phase::END;
 }
 
