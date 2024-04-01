@@ -33,7 +33,7 @@ Player *Field::getPlayer()
 
 void Field::setChips(int chips)
 {
-    chips_ = chips;
+    chips_ = chips_ + chips;
 }
 
 int Field::getChips()

@@ -118,15 +118,16 @@ void Game::handlePlace(Command command)
     {
         if (command.getParameters().size() == 3)
         {
-            int column = std::stoi(command.getParameters()[0]);
-            int row = std::stoi(command.getParameters()[1]);
-            int chips = std::stoi(command.getParameters()[2]);
-
+            int chips = std::stoi(command.getParameters()[0]);
+            int column = std::stoi(command.getParameters()[1]);
+            int row = std::stoi(command.getParameters()[2]);
+            // std::cout << chips << column << row << std::endl;
             // Check if the provided column and row are within bounds of the map
             if (column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows())
             {
                 // Place chips at the specified column and row for the active player
                 map_->placeChips(column - 1, row - 1, chips, active_player_);
+                map_->printMap();
             }
             else
             {
@@ -151,6 +152,7 @@ void Game::execute(Command command)
     {
     case CommandType::PLACE:
         // std::cout << map_->getColumns() << std::endl;
+        handlePlace(command);
         break;
 
     case CommandType::PASS:

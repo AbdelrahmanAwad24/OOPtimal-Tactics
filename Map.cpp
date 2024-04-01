@@ -99,7 +99,9 @@ void Map::placeChips(int column, int row, int chips, Player *player)
         // Update the number of chips in the specified field for the given player
         fields_[row][column]->setPlayer(player);
         fields_[row][column]->setChips(chips);
-        counter_ += chips; // Increment the counter for the total number of chips on the map
+        // fields_[row][column] = new Field(player, chips, 0);
+
+        // counter_ += chips; // Increment the counter for the total number of chips on the map
     }
     else
     {
