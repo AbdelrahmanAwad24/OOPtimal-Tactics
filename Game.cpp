@@ -135,11 +135,12 @@ void Game::handleMove(Command command)
                 map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
                 map_->moveChips(column - 1, row - 1, chips);
                 map_->printMap();
-                placement_counter++;
-                if (placement_counter == 2)
+                toggleActivePlayer();
+                movement_counter++;
+                if (movement_counter == 4)
                 {
-                    setPhase(Phase::MOVEMENT);
-                    placement_counter = 0;
+                    setPhase(Phase::PLACEMENT);
+                    movement_counter = 0;
                 }
             }
             else
@@ -174,7 +175,7 @@ void Game::execute(Command command)
 
     case CommandType::MOVE:
         // Implement logic to handle moving chips on the map
-        // std::cout << "Move command!" << std::endl;
+        handleMove(command);
 
         break;
 
@@ -273,7 +274,6 @@ bool Game::isRunning()
             movement_header = 0;
         }
         movementPhase();
-        toggleActivePlayer();
     }
     // endGame();
     return phase_ != Phase::END;
