@@ -6,6 +6,9 @@
 #include <cmath>
 
 #define CONFIG_MAGIC_NUMBER "OOP"
+int Game::toggle = 1;
+int Game::placement_counter = 0;
+int Game::movement_counter = 0;
 
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
@@ -70,7 +73,6 @@ bool Game::isValidConfig(char *config_path)
 void Game::start()
 {
     std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of " << max_rounds_ << " round(s)!" << std::endl;
-    std::cout << "\n------------------\nRound 1/" << max_rounds_ << " starts!\n------------------" << std::endl;
     double gained_chips = std::ceil(map_->getCounter() / 3.0);
     player_a_->setChips(gained_chips);
     player_b_->setChips(gained_chips);
@@ -137,17 +139,6 @@ void Game::handleMove(Command command)
                 map_->printMap();
                 toggleActivePlayer();
                 movement_counter++;
-                if (player_a_->hasPassed() && player_b_->hasPassed())
-                {
-                    if (current_round_ == max_rounds_)
-                    {
-                        setPhase(Phase::END);
-                    }
-                    else
-                    {
-                        setPhase(Phase::PLACEMENT);
-                    }
-                }
             }
             else
             {
@@ -169,8 +160,27 @@ void Game::handlePass()
 {
     if (phase_ == Phase::MOVEMENT)
     {
-        active_player_->setPassed(true);
+        if (active_player_ == player_a_)
+        {
+            player_a_->setPassed(true);
+        }
+        else
+        {
+            player_b_->setPassed(true);
+        }
     }
+    if (player_a_->hasPassed() && player_b_->hasPassed())
+    {
+        if (current_round_ == max_rounds_)
+        {
+            setPhase(Phase::END);
+        }
+        else
+        {
+            setPhase(Phase::PLACEMENT);
+        }
+    }
+    toggleActivePlayer();
 }
 
 void Game::execute(Command command)
@@ -231,10 +241,6 @@ void Game::execute(Command command)
     }
 }
 
-int Game::toggle = 1;
-int Game::placement_counter = 0;
-int Game::movement_counter = 0;
-
 void Game::placmentPhase()
 {
     std::cout << "Player " << getActivePlayer()->getId() << ", you have " << getActivePlayer()->getChips() << " chip(s) left, where and how do you want to place your chips?" << std::endl;
@@ -243,11 +249,11 @@ void Game::placmentPhase()
 void Game::movementPhase()
 {
     std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do?" << std::endl;
-    if (movement_counter == 4)
-    {
-        setPhase(Phase::PLACEMENT);
-        movement_counter = 0;
-    }
+    // if (movement_counter == 4)
+    // {
+    //     setPhase(Phase::PLACEMENT);
+    //     movement_counter = 0;
+    // }
 }
 
 void Game::endGame()
@@ -262,10 +268,12 @@ int Game::movement_header = 1;
 
 bool Game::isRunning()
 {
+
     if (phase_ == Phase::PLACEMENT)
     {
         if (placement_header)
         {
+            std::cout << "\n------------------\nRound " << current_round_ << "/" << max_rounds_ << " starts!\n------------------" << std::endl;
             std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
             if (toggle)
             {
@@ -288,6 +296,7 @@ bool Game::isRunning()
             movement_header = 0;
         }
         movementPhase();
+        current_round_++;
     }
     // endGame();
     return phase_ != Phase::END;
