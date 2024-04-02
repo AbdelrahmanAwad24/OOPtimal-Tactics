@@ -123,15 +123,23 @@ void Game::handlePlace(Command command)
             if (column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows())
             {
                 // Place chips at the specified column and row for the active player
-                map_->placeChips(column - 1, row - 1, chips, active_player_);
-                active_player_->setChips(active_player_->getChips() - chips);
+                int valid_move = map_->placeChips(column - 1, row - 1, chips, active_player_);
+                if (valid_move == 1)
+                {
+                    active_player_->setChips(active_player_->getChips() - chips);
+                }
+                else
+                {
+                    std::cout << "Invalid column or row number!" << std::endl;
+                }
+
+                // map_->placeChips(column - 1, row - 1, chips, active_player_);
                 if (active_player_->getChips() == 0)
                 {
                     active_player_->setPassed(true);
                     toggleActivePlayer();
                     placement_counter++;
                 }
-
                 // std::cout << active_player_->getChips() << std::endl;
                 if (placement_counter == 2)
                 {
@@ -141,7 +149,7 @@ void Game::handlePlace(Command command)
             }
             else
             {
-                std::cout << "Invalid column or row number!" << std::endl;
+                std::cout << "[ERROR] Invalid origin!" << std::endl;
             }
         }
         else
@@ -170,14 +178,17 @@ void Game::handleMove(Command command)
             // if ((column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows())
             // && (new_column >= 1 && new_column <= map_->getColumns() && new_row >= 1 && new_row <= map_->getRows()))
             int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-
-            if (valid_move)
+            if (valid_move == 1)
             {
                 // Place chips at the specified column and row for the active player
                 map_->moveChips(column - 1, row - 1, chips);
-                active_player_->setPassed(true);
+                // active_player_->setPassed(true);
                 // map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
                 toggleActivePlayer();
+                if (getActivePlayer()->hasPassed())
+                {
+                    toggleActivePlayer();
+                }
             }
             else
             {
@@ -227,6 +238,8 @@ void Game::handlePass()
             else if (phase_ == Phase::MOVEMENT)
             {
                 setPhase(Phase::PLACEMENT);
+                placement_header = 1;
+                movement_header = 1;
                 player_a_->setPassed(false);
                 player_b_->setPassed(false);
                 current_round_++;
@@ -258,6 +271,11 @@ void Game::execute(Command command)
 
     case CommandType::MOVE:
         // Implement logic to handle moving chips on the map
+        // if (getActivePlayer()->hasPassed())
+        // {
+        //     toggleActivePlayer();
+        // }
+
         handleMove(command);
         if (toggle)
         {

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Field::Field(Player *player, int chips, bool is_water) : player_(player), chips_(chips), is_water_(is_water)
+Field::Field(Player *player, int chips, bool is_water, bool is_empty) : player_(player), chips_(chips), is_water_(is_water), is_empty_(is_empty)
 {
     // if (is_water_)
     // {
@@ -51,9 +51,9 @@ bool Field::isWater()
     return is_water_;
 }
 
-void Field::setIsWater(bool isWater)
+void Field::setIsWater(bool is_water)
 {
-    is_water_ = isWater;
+    is_water_ = is_water;
 }
 
 bool Field::isEmpty()
@@ -61,9 +61,9 @@ bool Field::isEmpty()
     return is_empty_;
 }
 
-void Field::setIsEmpty(bool isEmpty)
+void Field::setIsEmpty(bool is_empty)
 {
-    is_empty_ = isEmpty;
+    is_empty_ = is_empty;
 }
 
 // int Field::counter = 0;
@@ -80,9 +80,9 @@ void Field::printField()
             << getPlayer()->getId() << " " << chips_;
         // counter++;
     }
-    else
+    else if (isEmpty())
     {
-        setIsEmpty(true);
+        // setIsEmpty(true);
         std::cout << "   ";
     }
 }

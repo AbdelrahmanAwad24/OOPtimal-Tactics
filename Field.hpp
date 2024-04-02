@@ -15,7 +15,7 @@ private:
     // static int counter;
 
 public:
-    Field(Player *player, int chips, bool is_water);
+    Field(Player *player, int chips, bool is_water, bool is_empty);
     ~Field();
 
     Player *getPlayer();

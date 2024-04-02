@@ -33,6 +33,7 @@ Map::Map(char *config_path, Player *player_a, Player *player_b)
             Player *player = nullptr;
             int chips = 0;
             bool is_water = false;
+            bool is_empty = false;
             char symbol = line[j];
             if (symbol == 'a')
             {
@@ -49,7 +50,12 @@ Map::Map(char *config_path, Player *player_a, Player *player_b)
             {
                 is_water = true;
             }
-            fields_[i][j] = new Field(player, chips, is_water);
+            else if (symbol == '0')
+            {
+                is_empty = true;
+            }
+
+            fields_[i][j] = new Field(player, chips, is_water, is_empty);
         }
     }
 }
@@ -97,7 +103,13 @@ int Map::placeChips(int column, int row, int chips, Player *player)
     if (column >= 0 && column < columns_ && row >= 0 && row < rows_)
     {
         // Update the number of chips in the specified field for the given player
-        if (fields_[row][column]->getPlayer()->getId() == player->getId() || fields_[row][column]->isEmpty())
+        if (fields_[row][column]->isEmpty())
+        {
+            fields_[row][column]->setPlayer(player);
+            fields_[row][column]->setChips(chips);
+            return 1;
+        }
+        if (fields_[row][column]->getPlayer()->getId() == player->getId())
         {
             fields_[row][column]->setPlayer(player);
             fields_[row][column]->setChips(chips);
