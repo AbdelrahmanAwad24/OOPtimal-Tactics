@@ -127,6 +127,7 @@ void Game::handlePlace(Command command)
                 active_player_->setChips(active_player_->getChips() - chips);
                 if (active_player_->getChips() == 0)
                 {
+                    active_player_->setPassed(true);
                     toggleActivePlayer();
                     placement_counter++;
                 }
@@ -192,17 +193,17 @@ void Game::handleMove(Command command)
 
 void Game::handlePass()
 {
-    if (phase_ == Phase::MOVEMENT)
+    // todo if (phase_ == Phase::MOVEMENT)
+    //  {
+    if (active_player_ == player_a_)
     {
-        if (active_player_ == player_a_)
-        {
-            player_a_->setPassed(true);
-        }
-        else
-        {
-            player_b_->setPassed(true);
-        }
+        player_a_->setPassed(true);
     }
+    else
+    {
+        player_b_->setPassed(true);
+    }
+    //}
     if (player_a_->hasPassed() && player_b_->hasPassed())
     {
         if (current_round_ == max_rounds_)
@@ -211,9 +212,21 @@ void Game::handlePass()
         }
         else
         {
-            setPhase(Phase::PLACEMENT);
-            placement_header = 1;
-            current_round_++;
+            if (phase_ == Phase::PLACEMENT)
+            {
+                setPhase(Phase::PLACEMENT);
+                placement_header = 1;
+                movement_header = 1;
+                player_a_->setPassed(false);
+                player_b_->setPassed(false);
+                current_round_++;
+            }
+            else if (phase_ == Phase::PLACEMENT)
+            {
+                setPhase(Phase::PLACEMENT);
+                player_a_->setPassed(false);
+                player_b_->setPassed(false);
+            }
         }
     }
     // toggleActivePlayer();
