@@ -56,6 +56,16 @@ void Field::setIsWater(bool isWater)
     is_water_ = isWater;
 }
 
+bool Field::isEmpty()
+{
+    return is_empty_;
+}
+
+void Field::setIsEmpty(bool isEmpty)
+{
+    is_empty_ = isEmpty;
+}
+
 // int Field::counter = 0;
 
 void Field::printField()
@@ -72,6 +82,7 @@ void Field::printField()
     }
     else
     {
+        setIsEmpty(true);
         std::cout << "   ";
     }
 }

@@ -11,6 +11,7 @@ private:
     Player *player_;
     int chips_;
     bool is_water_;
+    bool is_empty_;
     // static int counter;
 
 public:
@@ -23,6 +24,8 @@ public:
     void setChips(int chips);
     bool isWater();
     void setIsWater(bool isWater);
+    bool isEmpty();
+    void setIsEmpty(bool isEmpty);
     void printField();
     void removeChips(int chips);
 };

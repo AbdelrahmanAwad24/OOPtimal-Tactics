@@ -167,15 +167,21 @@ void Game::handleMove(Command command)
             int new_column = std::stoi(command.getParameters()[3]);
             int new_row = std::stoi(command.getParameters()[4]);
             // Check if the provided column and row are within bounds of the map
-            if ((column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows()) && (new_column >= 1 && new_column <= map_->getColumns() && new_row >= 1 && new_row <= map_->getRows()))
+            // if ((column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows())
+            // && (new_column >= 1 && new_column <= map_->getColumns() && new_row >= 1 && new_row <= map_->getRows()))
+            int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
+
+            if (valid_move)
             {
                 // Place chips at the specified column and row for the active player
-                map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
                 map_->moveChips(column - 1, row - 1, chips);
+                active_player_->setPassed(true);
+                // map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
+                toggleActivePlayer();
             }
             else
             {
-                std::cout << "Invalid column or row number!" << std::endl;
+                std::cout << "[ERROR] Invalid origin!" << std::endl;
             }
         }
         else
@@ -253,7 +259,6 @@ void Game::execute(Command command)
     case CommandType::MOVE:
         // Implement logic to handle moving chips on the map
         handleMove(command);
-        toggleActivePlayer();
         if (toggle)
         {
             map_->printMap();

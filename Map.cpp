@@ -92,18 +92,19 @@ void Map::setColumns(int columns)
     columns_ = columns;
 }
 
-void Map::placeChips(int column, int row, int chips, Player *player)
+int Map::placeChips(int column, int row, int chips, Player *player)
 {
     if (column >= 0 && column < columns_ && row >= 0 && row < rows_)
     {
         // Update the number of chips in the specified field for the given player
-        fields_[row][column]->setPlayer(player);
-        fields_[row][column]->setChips(chips);
+        if (fields_[row][column]->getPlayer()->getId() == player->getId() || fields_[row][column]->isEmpty())
+        {
+            fields_[row][column]->setPlayer(player);
+            fields_[row][column]->setChips(chips);
+            return 1;
+        }
     }
-    else
-    {
-        std::cout << "Invalid column or row number!" << std::endl;
-    }
+    return 0;
 }
 
 void Map::moveChips(int column, int row, int chips)
