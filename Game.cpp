@@ -214,7 +214,7 @@ void Game::handlePass()
         {
             if (phase_ == Phase::PLACEMENT)
             {
-                setPhase(Phase::PLACEMENT);
+                setPhase(Phase::MOVEMENT);
                 placement_header = 1;
                 movement_header = 1;
                 player_a_->setPassed(false);
