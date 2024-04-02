@@ -102,9 +102,9 @@ bool Game::isValidConfig(char *config_path)
 void Game::start()
 {
     std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of " << max_rounds_ << " round(s)!" << std::endl;
-    double gained_chips = std::ceil(map_->getCounter() / 3.0);
-    player_a_->setChips(gained_chips);
-    player_b_->setChips(gained_chips);
+    // double gained_chips = std::ceil(map_->getCounter() / 3.0);
+    // player_a_->setChips(gained_chips);
+    // player_b_->setChips(gained_chips);
     //  map_->getFields(fiel)
     // std::cout << fol << std::endl;
     // map_->printMap();
@@ -124,9 +124,14 @@ void Game::handlePlace(Command command)
             {
                 // Place chips at the specified column and row for the active player
                 map_->placeChips(column - 1, row - 1, chips, active_player_);
-                map_->printMap();
-                placement_counter++;
-                toggleActivePlayer();
+                active_player_->setChips(active_player_->getChips() - chips);
+                if (active_player_->getChips() == 0)
+                {
+                    toggleActivePlayer();
+                    placement_counter++;
+                }
+
+                // std::cout << active_player_->getChips() << std::endl;
                 if (placement_counter == 2)
                 {
                     setPhase(Phase::MOVEMENT);
@@ -166,8 +171,8 @@ void Game::handleMove(Command command)
                 // Place chips at the specified column and row for the active player
                 map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
                 map_->moveChips(column - 1, row - 1, chips);
-                map_->printMap();
-                toggleActivePlayer();
+                // map_->printMap();
+                // toggleActivePlayer();
             }
             else
             {
@@ -211,7 +216,7 @@ void Game::handlePass()
             current_round_++;
         }
     }
-    toggleActivePlayer();
+    // toggleActivePlayer();
 }
 
 void Game::execute(Command command)
@@ -222,16 +227,26 @@ void Game::execute(Command command)
     case CommandType::PLACE:
         // std::cout << map_->getColumns() << std::endl;
         handlePlace(command);
+        // toggleActivePlayer();
+        if (toggle)
+        {
+            map_->printMap();
+        }
         break;
 
     case CommandType::PASS:
         handlePass();
+        toggleActivePlayer();
         break;
 
     case CommandType::MOVE:
         // Implement logic to handle moving chips on the map
         handleMove(command);
-
+        toggleActivePlayer();
+        if (toggle)
+        {
+            map_->printMap();
+        }
         break;
 
     case CommandType::MAP:
@@ -295,18 +310,21 @@ void Game::endGame()
 
 bool Game::isRunning()
 {
-    handleActivePlayer();
     if (phase_ == Phase::PLACEMENT)
     {
         if (placement_header)
         {
+            double gained_chips = std::ceil(map_->getCounter() / 3.0);
+            player_a_->setChips(gained_chips);
+            player_b_->setChips(gained_chips);
+            handleActivePlayer();
             std::cout << "\n------------------\nRound " << current_round_ << "/" << max_rounds_ << " starts!\n------------------" << std::endl;
             std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
+            placement_header = 0;
             if (toggle)
             {
                 map_->printMap();
             }
-            placement_header = 0;
         }
         placmentPhase();
         // setActivePlayer(player_b_);
@@ -315,12 +333,14 @@ bool Game::isRunning()
     {
         if (movement_header)
         {
+            handleActivePlayer();
             std::cout << "------------------\nMovement Phase\n------------------" << std::endl;
+
+            movement_header = 0;
             if (toggle)
             {
                 map_->printMap();
             }
-            movement_header = 0;
         }
         movementPhase();
     }
