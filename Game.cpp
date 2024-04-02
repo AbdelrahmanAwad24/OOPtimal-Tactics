@@ -327,6 +327,8 @@ bool Game::isRunning()
     {
         if (placement_header)
         {
+            player_a_->setPassed(false);
+            player_b_->setPassed(false);
             double gained_chips = std::ceil(map_->getCounter() / 3.0);
             player_a_->setChips(gained_chips);
             player_b_->setChips(gained_chips);
@@ -344,8 +346,11 @@ bool Game::isRunning()
     }
     else if (phase_ == Phase::MOVEMENT)
     {
+
         if (movement_header)
         {
+            player_a_->setPassed(false);
+            player_b_->setPassed(false);
             handleActivePlayer();
             std::cout << "------------------\nMovement Phase\n------------------" << std::endl;
 
