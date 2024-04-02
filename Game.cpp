@@ -172,8 +172,6 @@ void Game::handleMove(Command command)
                 // Place chips at the specified column and row for the active player
                 map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
                 map_->moveChips(column - 1, row - 1, chips);
-                // map_->printMap();
-                // toggleActivePlayer();
             }
             else
             {
@@ -219,13 +217,13 @@ void Game::handlePass()
                 movement_header = 1;
                 player_a_->setPassed(false);
                 player_b_->setPassed(false);
-                current_round_++;
             }
             else if (phase_ == Phase::MOVEMENT)
             {
                 setPhase(Phase::PLACEMENT);
                 player_a_->setPassed(false);
                 player_b_->setPassed(false);
+                current_round_++;
             }
         }
     }
