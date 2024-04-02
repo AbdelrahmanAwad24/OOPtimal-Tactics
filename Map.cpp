@@ -93,6 +93,25 @@ void Map::printMap()
     }
     std::cout << std::endl;
 }
+
+void Map::calculateOcuppiedFields()
+{
+    for (int i = 0; i < rows_; ++i)
+    {
+        for (int j = 0; j < columns_; ++j)
+        {
+            if (fields_[i][j]->isEmpty() || fields_[i][j]->isWater())
+            {
+                continue;
+            }
+            else
+            {
+                fields_[i][j]->getPlayer()->calcClaimedFields();
+            }
+        }
+    }
+}
+
 void Map::setColumns(int columns)
 {
     columns_ = columns;

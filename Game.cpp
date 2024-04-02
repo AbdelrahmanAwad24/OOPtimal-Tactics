@@ -101,6 +101,8 @@ bool Game::isValidConfig(char *config_path)
 
 void Game::start()
 {
+    // map_->calculateOcuppiedFields();
+    // std::cout << player_a_->getClaimedFields() << player_b_->getClaimedFields() << std::endl;
     std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of " << max_rounds_ << " round(s)!" << std::endl;
     // double gained_chips = std::ceil(map_->getCounter() / 3.0);
     // player_a_->setChips(gained_chips);
