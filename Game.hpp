@@ -64,6 +64,7 @@ public:
     void placmentPhase();
     void movementPhase();
     void toggleActivePlayer();
+    void handleActivePlayer();
     void endGame();
     void handlePlace(Command command);
     void handleMove(Command command);

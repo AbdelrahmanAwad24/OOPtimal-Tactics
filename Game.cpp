@@ -9,6 +9,9 @@
 int Game::toggle = 1;
 int Game::placement_counter = 0;
 int Game::movement_counter = 0;
+int Game::toggle_flag = 0;
+int Game::placement_header = 1;
+int Game::movement_header = 1;
 
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
@@ -39,6 +42,32 @@ void Game::toggleActivePlayer()
     else
     {
         setActivePlayer(player_a_);
+    }
+}
+
+void Game::handleActivePlayer()
+{
+    if (phase_ == Phase::PLACEMENT)
+    {
+        if (current_round_ % 2 == 1)
+        { // If round number is odd
+            setActivePlayer(player_a_);
+        }
+        else
+        { // If round number is even
+            setActivePlayer(player_b_);
+        }
+    }
+    if (phase_ == Phase::MOVEMENT)
+    {
+        if (current_round_ % 2 == 1)
+        { // If round number is odd
+            setActivePlayer(player_b_);
+        }
+        else
+        { // If round number is even
+            setActivePlayer(player_a_);
+        }
     }
 }
 
@@ -97,6 +126,7 @@ void Game::handlePlace(Command command)
                 map_->placeChips(column - 1, row - 1, chips, active_player_);
                 map_->printMap();
                 placement_counter++;
+                toggleActivePlayer();
                 if (placement_counter == 2)
                 {
                     setPhase(Phase::MOVEMENT);
@@ -138,7 +168,6 @@ void Game::handleMove(Command command)
                 map_->moveChips(column - 1, row - 1, chips);
                 map_->printMap();
                 toggleActivePlayer();
-                movement_counter++;
             }
             else
             {
@@ -178,6 +207,8 @@ void Game::handlePass()
         else
         {
             setPhase(Phase::PLACEMENT);
+            placement_header = 1;
+            current_round_++;
         }
     }
     toggleActivePlayer();
@@ -231,7 +262,7 @@ void Game::execute(Command command)
     }
     if (phase_ == Phase::PLACEMENT)
     {
-        setActivePlayer(player_b_);
+        // setActivePlayer(player_b_);
         // placmentPhase();
         // setPhase(Phase::MOVEMENT);
     }
@@ -262,13 +293,9 @@ void Game::endGame()
     std::cout << " !Player B claimed 2 field(s) !\n\nCongratulations, Player B !You won !" << std::endl;
 }
 
-int Game::toggle_flag = 0;
-int Game::placement_header = 1;
-int Game::movement_header = 1;
-
 bool Game::isRunning()
 {
-
+    handleActivePlayer();
     if (phase_ == Phase::PLACEMENT)
     {
         if (placement_header)
@@ -296,7 +323,6 @@ bool Game::isRunning()
             movement_header = 0;
         }
         movementPhase();
-        current_round_++;
     }
     // endGame();
     return phase_ != Phase::END;
