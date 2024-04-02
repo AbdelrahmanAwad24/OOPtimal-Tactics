@@ -206,7 +206,7 @@ void Game::handlePass()
     //}
     if (player_a_->hasPassed() && player_b_->hasPassed())
     {
-        if (current_round_ == max_rounds_)
+        if (current_round_ == max_rounds_ && phase_ == Phase::MOVEMENT)
         {
             setPhase(Phase::END);
         }
@@ -221,7 +221,7 @@ void Game::handlePass()
                 player_b_->setPassed(false);
                 current_round_++;
             }
-            else if (phase_ == Phase::PLACEMENT)
+            else if (phase_ == Phase::MOVEMENT)
             {
                 setPhase(Phase::PLACEMENT);
                 player_a_->setPassed(false);
