@@ -76,8 +76,17 @@ void Field::printField()
     }
     else if (getPlayer())
     {
-        std::cout
-            << getPlayer()->getId() << " " << chips_;
+        if (chips_ == 0)
+        {
+            std::cout << "   ";
+            setIsEmpty(true);
+            setPlayer(nullptr);
+        }
+        else
+        {
+            std::cout
+                << getPlayer()->getId() << " " << chips_;
+        }
         // counter++;
     }
     else if (isEmpty())
