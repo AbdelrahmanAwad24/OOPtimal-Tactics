@@ -344,8 +344,22 @@ void Game::movementPhase()
 
 void Game::endGame()
 {
-    std::cout << "------------------\nGAME END !\n\nPlayer A claimed 1 field(s)" << std::endl;
-    std::cout << " !Player B claimed 2 field(s) !\n\nCongratulations, Player B !You won !" << std::endl;
+    player_a_->setClaimedFields(0);
+    player_b_->setClaimedFields(0);
+    map_->calculateOcuppiedFields();
+    std::cout << "------------------\nGAME END !\n\nPlayer A claimed " << player_a_->getClaimedFields() << " field(s)" << std::endl;
+    std::cout << " !Player B claimed " << player_b_->getClaimedFields() << " field(s) !" << std::endl;
+    if (player_a_->getClaimedFields() != player_b_->getClaimedFields())
+    {
+        if (player_a_->getClaimedFields() > player_b_->getClaimedFields())
+        {
+            std::cout << " \nCongratulations, Player A !You won !" << std::endl;
+        }
+        else
+        {
+            std::cout << " \nCongratulations, Player B !You won !" << std::endl;
+        }
+    }
 }
 
 bool Game::isRunning()
@@ -392,7 +406,10 @@ bool Game::isRunning()
         }
         movementPhase();
     }
-    // endGame();
+    else
+    {
+        endGame();
+    }
     return phase_ != Phase::END;
 }
 
