@@ -135,6 +135,25 @@ int Map::placeChips(int column, int row, int chips, Player *player)
             fields_[row][column]->setChips(chips);
             return 1;
         }
+        else if (fields_[row][column]->getPlayer()->getId() != player->getId())
+        {
+            int new_chips = fields_[row][column]->getChips() + 1 - chips;
+            if (new_chips > 0)
+            {
+                fields_[row][column]->setChips(new_chips);
+            }
+            else if (new_chips < 0)
+            {
+                fields_[row][column]->setPlayer(player);
+                fields_[row][column]->setChips(new_chips * -1);
+            }
+            else
+            {
+                fields_[row][column]->setIsEmpty(true);
+                fields_[row][column]->setPlayer(nullptr);
+            }
+            return 2;
+        }
     }
     return 0;
 }
