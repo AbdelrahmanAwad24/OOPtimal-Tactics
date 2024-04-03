@@ -350,11 +350,15 @@ bool Game::isRunning()
     {
         if (placement_header)
         {
+            player_a_->setClaimedFields(0);
+            player_b_->setClaimedFields(0);
+            map_->calculateOcuppiedFields();
             player_a_->setPassed(false);
             player_b_->setPassed(false);
-            double gained_chips = std::ceil(map_->getCounter() / 3.0);
-            player_a_->setChips(gained_chips);
-            player_b_->setChips(gained_chips);
+            double gained_chips_a = std::ceil(player_a_->getClaimedFields() / 3.0);
+            double gained_chips_b = std::ceil(player_b_->getClaimedFields() / 3.0);
+            player_a_->setChips(gained_chips_a);
+            player_b_->setChips(gained_chips_b);
             handleActivePlayer();
             std::cout << "\n------------------\nRound " << current_round_ << "/" << max_rounds_ << " starts!\n------------------" << std::endl;
             std::cout << "\n------------------\nPlacement Phase\n------------------" << std::endl;
@@ -376,7 +380,6 @@ bool Game::isRunning()
             player_b_->setPassed(false);
             handleActivePlayer();
             std::cout << "------------------\nMovement Phase\n------------------" << std::endl;
-
             movement_header = 0;
             if (toggle)
             {

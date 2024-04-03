@@ -125,6 +125,7 @@ int Map::placeChips(int column, int row, int chips, Player *player)
         if (fields_[row][column]->isEmpty())
         {
             fields_[row][column]->setPlayer(player);
+            fields_[row][column]->setIsEmpty(false);
             fields_[row][column]->setChips(chips);
             return 1;
         }
