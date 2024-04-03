@@ -44,6 +44,10 @@ void Field::setChips(int chips)
 void Field::removeChips(int chips)
 {
     chips_ = chips_ - chips;
+    if (chips_ == 0)
+    {
+        setIsEmpty(true);
+    }
 }
 
 int Field::getChips()
