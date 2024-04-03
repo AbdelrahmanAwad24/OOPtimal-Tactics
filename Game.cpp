@@ -216,7 +216,7 @@ void Game::handleMove(Command command)
 void Game::handleInfo()
 {
     std::cout << "Player " << active_player_->getId() << ":" << std::endl;
-    std::cout << "You have " << active_player_->getSavedChips() << " chips(s) saved!" << std::endl;
+    std::cout << "You have " << active_player_->getSavedChips() << " chip(s) saved!" << std::endl;
     std::cout << "You own " << active_player_->getClaimedFields() << " field(s)!\n"
               << std::endl;
 }
@@ -294,7 +294,7 @@ void Game::execute(Command command)
         handleInfo();
         break;
 
-        case CommandType::INVALID:
+    case CommandType::INVALID:
     case CommandType::QUIT:
     case CommandType::WRONG_PARAM:
 
