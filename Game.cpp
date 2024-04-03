@@ -24,7 +24,6 @@ Game::Game(int maximum_rounds, char *config_path)
     setPlayerB(player_b);
     setActivePlayer(player_a);
     map_ = new Map(config_path, player_a_, player_b_);
-    // setMap(map_);
 }
 
 Game::~Game()
@@ -101,15 +100,7 @@ bool Game::isValidConfig(char *config_path)
 
 void Game::start()
 {
-    // map_->calculateOcuppiedFields();
-    // std::cout << player_a_->getClaimedFields() << player_b_->getClaimedFields() << std::endl;
     std::cout << "Welcome to OOPtimal Tactics!\nPlaying maximum of " << max_rounds_ << " round(s)!" << std::endl;
-    // double gained_chips = std::ceil(map_->getCounter() / 3.0);
-    // player_a_->setChips(gained_chips);
-    // player_b_->setChips(gained_chips);
-    //  map_->getFields(fiel)
-    // std::cout << fol << std::endl;
-    // map_->printMap();
 }
 
 void Game::handlePlace(Command command)
@@ -177,33 +168,34 @@ void Game::handleMove(Command command)
             int new_column = std::stoi(command.getParameters()[3]);
             int new_row = std::stoi(command.getParameters()[4]);
             // Check if the provided column and row are within bounds of the map
-            // if ((column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows())
-            // && (new_column >= 1 && new_column <= map_->getColumns() && new_row >= 1 && new_row <= map_->getRows()))
-            int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-            if (valid_move == 1)
-            {
-                // Place chips at the specified column and row for the active player
-                map_->moveChips(column - 1, row - 1, chips);
-                // active_player_->setPassed(true);
-                // map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-                toggleActivePlayer();
-                if (getActivePlayer()->hasPassed())
-                {
-                    toggleActivePlayer();
-                }
-            }
-            else if (valid_move == 2)
-            {
-                map_->moveChips(column - 1, row - 1, chips);
-            }
-            else
+            if (!map_->checkValidField(active_player_, column, row))
             {
                 std::cout << "[ERROR] Invalid origin!" << std::endl;
             }
-        }
-        else
-        {
-            std::cout << "Wrong number of parameters for MOVE command!" << std::endl;
+            else
+            {
+                int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
+                if (valid_move == 1)
+                {
+                    // Place chips at the specified column and row for the active player
+                    map_->moveChips(column - 1, row - 1, chips);
+                    // active_player_->setPassed(true);
+                    // map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
+                    toggleActivePlayer();
+                    if (getActivePlayer()->hasPassed())
+                    {
+                        toggleActivePlayer();
+                    }
+                }
+                else if (valid_move == 2)
+                {
+                    map_->moveChips(column - 1, row - 1, chips);
+                }
+                else
+                {
+                    std::cout << "[ERROR] Invalid origin!" << std::endl;
+                }
+            }
         }
     }
     else
@@ -214,8 +206,6 @@ void Game::handleMove(Command command)
 
 void Game::handlePass()
 {
-    // todo if (phase_ == Phase::MOVEMENT)
-    //  {
     if (active_player_ == player_a_)
     {
         player_a_->setPassed(true);
@@ -224,7 +214,6 @@ void Game::handlePass()
     {
         player_b_->setPassed(true);
     }
-    //}
     if (player_a_->hasPassed() && player_b_->hasPassed())
     {
         if (current_round_ == max_rounds_ && phase_ == Phase::MOVEMENT)
@@ -252,7 +241,6 @@ void Game::handlePass()
             }
         }
     }
-    // toggleActivePlayer();
 }
 
 void Game::execute(Command command)
@@ -261,9 +249,7 @@ void Game::execute(Command command)
     switch (command.getType())
     {
     case CommandType::PLACE:
-        // std::cout << map_->getColumns() << std::endl;
         handlePlace(command);
-        // toggleActivePlayer();
         if (toggle)
         {
             map_->printMap();
@@ -276,12 +262,6 @@ void Game::execute(Command command)
         break;
 
     case CommandType::MOVE:
-        // Implement logic to handle moving chips on the map
-        // if (getActivePlayer()->hasPassed())
-        // {
-        //     toggleActivePlayer();
-        // }
-
         handleMove(command);
         if (toggle)
         {
@@ -291,39 +271,14 @@ void Game::execute(Command command)
 
     case CommandType::MAP:
         toggle = !toggle;
-        // std::cout << "Map command!" << std::endl;
-
         break;
 
     case CommandType::INFO:
-        // Implement logic to display game information
-        // std::cout << "Info command!" << std::endl;
-
-        break;
-
-    case CommandType::QUIT:
-        // Implement logic to end the game
-        // std::cout << "Quit command!" << std::endl;
-
-        break;
-
     case CommandType::INVALID:
-        // Handle invalid command type
-        break;
-
+    case CommandType::QUIT:
     case CommandType::WRONG_PARAM:
-        // Handle command with wrong parameters
+
         break;
-    }
-    if (phase_ == Phase::PLACEMENT)
-    {
-        // setActivePlayer(player_b_);
-        // placmentPhase();
-        // setPhase(Phase::MOVEMENT);
-    }
-    if (phase_ == Phase::MOVEMENT)
-    {
-        // toggleActivePlayer();
     }
 }
 
@@ -335,11 +290,6 @@ void Game::placmentPhase()
 void Game::movementPhase()
 {
     std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do?" << std::endl;
-    // if (movement_counter == 4)
-    // {
-    //     setPhase(Phase::PLACEMENT);
-    //     movement_counter = 0;
-    // }
 }
 
 void Game::endGame()
@@ -387,11 +337,9 @@ bool Game::isRunning()
             }
         }
         placmentPhase();
-        // setActivePlayer(player_b_);
     }
     else if (phase_ == Phase::MOVEMENT)
     {
-
         if (movement_header)
         {
             player_a_->setPassed(false);

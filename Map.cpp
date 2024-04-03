@@ -158,6 +158,10 @@ int Map::placeChips(int column, int row, int chips, Player *player)
     }
     return 0;
 }
+int Map::checkValidField(Player *player, int column, int row)
+{
+    return fields_[row][column]->getPlayer()->getId() == player->getId();
+}
 
 void Map::moveChips(int column, int row, int chips)
 {

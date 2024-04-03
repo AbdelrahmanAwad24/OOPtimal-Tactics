@@ -32,6 +32,7 @@ public:
     void setOutputActive(bool output_active);
     bool isOutputActive();
     int placeChips(int column, int row, int chips, Player *player);
+    int checkValidField(Player *player, int column, int row);
     void calculateOcuppiedFields();
     void moveChips(int column, int row, int chips);
 };
