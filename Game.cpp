@@ -200,9 +200,9 @@ void Game::handleMove(Command command)
                         toggleActivePlayer();
                     }
                 }
-                else
+                if (toggle)
                 {
-                    std::cout << "[ERROR] Invalid origin!" << std::endl;
+                    map_->printMap();
                 }
             }
         }
@@ -213,6 +213,13 @@ void Game::handleMove(Command command)
     }
 }
 
+void Game::handleInfo()
+{
+    std::cout << "Player " << active_player_->getId() << ":" << std::endl;
+    std::cout << "You have " << active_player_->getSavedChips() << " chips(s) saved!" << std::endl;
+    std::cout << "You own " << active_player_->getClaimedFields() << " field(s)!\n"
+              << std::endl;
+}
 void Game::handlePass()
 {
     if (active_player_ == player_a_)
@@ -233,6 +240,7 @@ void Game::handlePass()
         {
             if (phase_ == Phase::PLACEMENT)
             {
+                active_player_->setSavedChips(active_player_->getChips());
                 setPhase(Phase::MOVEMENT);
                 placement_header = 1;
                 movement_header = 1;
@@ -272,10 +280,6 @@ void Game::execute(Command command)
 
     case CommandType::MOVE:
         handleMove(command);
-        if (toggle)
-        {
-            map_->printMap();
-        }
         break;
 
     case CommandType::MAP:
@@ -287,7 +291,10 @@ void Game::execute(Command command)
         break;
 
     case CommandType::INFO:
-    case CommandType::INVALID:
+        handleInfo();
+        break;
+
+        case CommandType::INVALID:
     case CommandType::QUIT:
     case CommandType::WRONG_PARAM:
 

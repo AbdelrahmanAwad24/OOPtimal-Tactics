@@ -71,6 +71,7 @@ public:
     void handlePlace(Command command);
     void handleMove(Command command);
     void handlePass();
+    void handleInfo();
 };
 
 #endif
