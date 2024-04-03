@@ -168,7 +168,8 @@ void Game::handleMove(Command command)
             int new_column = std::stoi(command.getParameters()[3]);
             int new_row = std::stoi(command.getParameters()[4]);
             // Check if the provided column and row are within bounds of the map
-            if (!map_->checkValidField(active_player_, column, row))
+            int check = map_->checkValidField(active_player_, column, row);
+            if (!check)
             {
                 std::cout << "[ERROR] Invalid origin!" << std::endl;
             }

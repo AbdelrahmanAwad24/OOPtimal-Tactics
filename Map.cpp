@@ -160,7 +160,19 @@ int Map::placeChips(int column, int row, int chips, Player *player)
 }
 int Map::checkValidField(Player *player, int column, int row)
 {
-    return fields_[row][column]->getPlayer()->getId() == player->getId();
+    if (fields_[row][column]->isEmpty())
+    {
+        return 1;
+    }
+    if (fields_[row][column]->isWater())
+    {
+        return 0;
+    }
+    if (fields_[row][column]->getPlayer()->getId() == player->getId())
+    {
+        return fields_[row][column]->getPlayer()->getId() == player->getId();
+    }
+    return 0;
 }
 
 void Map::moveChips(int column, int row, int chips)
