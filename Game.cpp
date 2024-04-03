@@ -314,6 +314,10 @@ void Game::placmentPhase()
 
 void Game::movementPhase()
 {
+    if (player_a_->getClaimedFields() == 0 || player_b_->getClaimedFields() == 0)
+    {
+        setPhase(Phase::END);
+    }
     std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do?" << std::endl;
 }
 
@@ -370,11 +374,6 @@ bool Game::isRunning()
             player_a_->setClaimedFields(0);
             player_b_->setClaimedFields(0);
             map_->calculateOcuppiedFields();
-            if (player_a_->getClaimedFields() == 0 || player_b_->getClaimedFields() == 0)
-            {
-                phase_ = Phase::END;
-            }
-
             player_a_->setPassed(false);
             player_b_->setPassed(false);
             handleActivePlayer();
