@@ -136,12 +136,17 @@ void Game::handlePlace(Command command)
                     toggleActivePlayer();
                     placement_counter++;
                 }
-                // std::cout << active_player_->getChips() << std::endl;
-                if (placement_counter == 2)
+                if (player_a_->hasPassed() && player_b_->hasPassed())
                 {
                     setPhase(Phase::MOVEMENT);
-                    placement_counter = 0;
                 }
+
+                // // std::cout << active_player_->getChips() << std::endl;
+                // if (placement_counter == 2)
+                // {
+                //     setPhase(Phase::MOVEMENT);
+                //     placement_counter = 0;
+                // }
             }
             else
             {
@@ -327,7 +332,7 @@ void Game::endGame()
         }
         else
         {
-            std::cout << " \nCongratulations, Player B !You won !" << std::endl;
+            std::cout << "\nCongratulations, Player B! You won!" << std::endl;
         }
     }
 }
@@ -362,6 +367,9 @@ bool Game::isRunning()
     {
         if (movement_header)
         {
+            player_a_->setClaimedFields(0);
+            player_b_->setClaimedFields(0);
+            map_->calculateOcuppiedFields();
             player_a_->setPassed(false);
             player_b_->setPassed(false);
             handleActivePlayer();
