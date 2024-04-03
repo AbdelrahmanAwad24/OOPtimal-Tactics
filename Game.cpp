@@ -347,7 +347,7 @@ void Game::endGame()
     player_a_->setClaimedFields(0);
     player_b_->setClaimedFields(0);
     map_->calculateOcuppiedFields();
-    std::cout << "------------------\nGAME END !\n\nPlayer A claimed " << player_a_->getClaimedFields() << " field(s)!" << std::endl;
+    std::cout << "------------------\nGAME END!\n\nPlayer A claimed " << player_a_->getClaimedFields() << " field(s)!" << std::endl;
     std::cout << "Player B claimed " << player_b_->getClaimedFields() << " field(s)!" << std::endl;
     if (player_a_->getClaimedFields() != player_b_->getClaimedFields())
     {
