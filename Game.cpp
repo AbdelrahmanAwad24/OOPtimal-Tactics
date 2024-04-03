@@ -12,6 +12,8 @@ int Game::movement_counter = 0;
 int Game::toggle_flag = 0;
 int Game::placement_header = 1;
 int Game::movement_header = 1;
+// int Game::saved_chips_a = 0;
+// int Game::saved_chips_b = 0;
 
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
@@ -120,6 +122,7 @@ void Game::handlePlace(Command command)
                 if (valid_move == 1)
                 {
                     active_player_->setChips(active_player_->getChips() - chips);
+                    active_player_->setSavedChips(active_player_->getChips());
                 }
                 else
                 {
@@ -277,6 +280,10 @@ void Game::execute(Command command)
 
     case CommandType::MAP:
         toggle = !toggle;
+        if (toggle)
+        {
+            map_->printMap();
+        }
         break;
 
     case CommandType::INFO:
@@ -329,8 +336,8 @@ bool Game::isRunning()
             map_->calculateOcuppiedFields();
             player_a_->setPassed(false);
             player_b_->setPassed(false);
-            double gained_chips_a = std::ceil(player_a_->getClaimedFields() / 3.0);
-            double gained_chips_b = std::ceil(player_b_->getClaimedFields() / 3.0);
+            double gained_chips_a = std::ceil(player_a_->getClaimedFields() / 3.0) + player_a_->getSavedChips();
+            double gained_chips_b = std::ceil(player_b_->getClaimedFields() / 3.0) + player_b_->getSavedChips();
             player_a_->setChips(gained_chips_a);
             player_b_->setChips(gained_chips_b);
             handleActivePlayer();

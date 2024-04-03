@@ -31,6 +31,8 @@ private:
     static int placement_counter;
     static int movement_header;
     static int movement_counter;
+    // static int saved_chips_a;
+    // static int saved_chips_b;
 
 public:
     Game(int maximum_rounds, char *config_path);

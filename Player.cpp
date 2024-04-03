@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Player::Player(char id) : id_(id), chips_(0), has_passed_(false), claimed_fields_(0) {}
+Player::Player(char id) : id_(id), chips_(0), has_passed_(false), claimed_fields_(0), saved_chips_(0) {}
 
 Player::~Player() {}
 
@@ -24,6 +24,16 @@ void Player::setChips(int chips)
 int Player::getChips()
 {
     return chips_;
+}
+
+void Player::setSavedChips(int saved_chips)
+{
+    saved_chips_ = saved_chips;
+}
+
+int Player::getSavedChips()
+{
+    return saved_chips_;
 }
 
 void Player::calcClaimedFields()

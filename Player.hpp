@@ -11,6 +11,7 @@ private:
     int chips_;
     bool has_passed_;
     int claimed_fields_;
+    int saved_chips_;
 
 public:
     Player(char id);
@@ -20,9 +21,11 @@ public:
 
     void setId(char id);
     char getId();
+    void calcClaimedFields();
     void setChips(int chips);
     int getChips();
-    void calcClaimedFields();
+    void setSavedChips(int saved_chips);
+    int getSavedChips();
     void setClaimedFields(int claimed_fields);
     int getClaimedFields();
     void setPassed(bool has_passed);
