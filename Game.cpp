@@ -314,11 +314,20 @@ void Game::placmentPhase()
 
 void Game::movementPhase()
 {
+    player_a_->setClaimedFields(0);
+    player_b_->setClaimedFields(0);
+    map_->calculateOcuppiedFields();
+    int end_flag = 0;
     if (player_a_->getClaimedFields() == 0 || player_b_->getClaimedFields() == 0)
     {
+        end_flag = 1;
+        endGame();
         setPhase(Phase::END);
     }
-    std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do?" << std::endl;
+    if (!end_flag)
+    {
+        std::cout << "Player " << getActivePlayer()->getId() << ", what do you want to do?" << std::endl;
+    }
 }
 
 void Game::endGame()
@@ -332,7 +341,7 @@ void Game::endGame()
     {
         if (player_a_->getClaimedFields() > player_b_->getClaimedFields())
         {
-            std::cout << " \nCongratulations, Player A !You won !" << std::endl;
+            std::cout << "\nCongratulations, Player A! You won!" << std::endl;
         }
         else
         {
