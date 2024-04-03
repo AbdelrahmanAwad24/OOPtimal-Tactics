@@ -145,6 +145,7 @@ int Map::placeChips(int column, int row, int chips, Player *player)
             else if (new_chips < 0)
             {
                 fields_[row][column]->setPlayer(player);
+                fields_[row][column]->resetChips(0);
                 fields_[row][column]->setChips(new_chips * -1);
             }
             else

@@ -21,6 +21,7 @@ public:
     Player *getPlayer();
     void setPlayer(Player *player);
     int getChips();
+    void resetChips(int chips);
     void setChips(int chips);
     bool isWater();
     void setIsWater(bool isWater);

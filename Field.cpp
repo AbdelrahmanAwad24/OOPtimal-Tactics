@@ -31,6 +31,11 @@ Player *Field::getPlayer()
     return player_;
 }
 
+void Field::resetChips(int chips)
+{
+    chips_ = chips;
+}
+
 void Field::setChips(int chips)
 {
     chips_ = chips_ + chips;
