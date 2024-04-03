@@ -184,7 +184,7 @@ void Game::handleMove(Command command)
             else
             {
                 int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-                if (valid_move == 1)
+                if (valid_move)
                 {
                     // Place chips at the specified column and row for the active player
                     map_->moveChips(column - 1, row - 1, chips);
@@ -196,15 +196,15 @@ void Game::handleMove(Command command)
                         toggleActivePlayer();
                     }
                 }
-                else if (valid_move == 2)
-                {
-                    map_->moveChips(column - 1, row - 1, chips);
-                    toggleActivePlayer();
-                    if (getActivePlayer()->hasPassed())
-                    {
-                        toggleActivePlayer();
-                    }
-                }
+                // else if (valid_move == 2)
+                // {
+                //     map_->moveChips(column - 1, row - 1, chips);
+                //     toggleActivePlayer();
+                //     if (getActivePlayer()->hasPassed())
+                //     {
+                //         toggleActivePlayer();
+                //     }
+                // }
                 if (toggle)
                 {
                     map_->printMap();
