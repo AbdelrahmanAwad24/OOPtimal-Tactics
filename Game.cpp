@@ -196,15 +196,6 @@ void Game::handleMove(Command command)
                         toggleActivePlayer();
                     }
                 }
-                // else if (valid_move == 2)
-                // {
-                //     map_->moveChips(column - 1, row - 1, chips);
-                //     toggleActivePlayer();
-                //     if (getActivePlayer()->hasPassed())
-                //     {
-                //         toggleActivePlayer();
-                //     }
-                // }
                 if (toggle)
                 {
                     map_->printMap();
