@@ -15,6 +15,11 @@ int Game::movement_header = 1;
 // int Game::saved_chips_a = 0;
 // int Game::saved_chips_b = 0;
 
+bool isInteger(double number)
+{
+    return number > 0 && std::floor(number) == number;
+}
+
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
       current_round_(1), max_rounds_(maximum_rounds), phase_(Phase::PLACEMENT),
@@ -107,13 +112,22 @@ void Game::start()
 
 void Game::handlePlace(Command command)
 {
+
     if (phase_ == Phase::PLACEMENT)
     {
         if (command.getParameters().size() == 3)
         {
-            int chips = std::stoi(command.getParameters()[0]);
-            int column = std::stoi(command.getParameters()[1]);
-            int row = std::stoi(command.getParameters()[2]);
+            double chips = std::stod(command.getParameters()[0]);
+            double column = std::stod(command.getParameters()[1]);
+            double row = std::stod(command.getParameters()[2]);
+            if (!isInteger(chips) || !isInteger(column) || !isInteger(row))
+            {
+                std::cout << "[ERROR] Invalid amount! Must be a number > 0!" << std::endl;
+                return;
+            }
+
+            std::cout << chips << column << row << std::endl;
+
             // Check if the provided column and row are within bounds of the map
             if (column >= 1 && column <= map_->getColumns() && row >= 1 && row <= map_->getRows())
             {
@@ -128,7 +142,6 @@ void Game::handlePlace(Command command)
                 {
                     std::cout << "Invalid column or row number!" << std::endl;
                 }
-
                 // map_->placeChips(column - 1, row - 1, chips, active_player_);
                 if (active_player_->getChips() == 0)
                 {
@@ -140,13 +153,6 @@ void Game::handlePlace(Command command)
                 {
                     setPhase(Phase::MOVEMENT);
                 }
-
-                // // std::cout << active_player_->getChips() << std::endl;
-                // if (placement_counter == 2)
-                // {
-                //     setPhase(Phase::MOVEMENT);
-                //     placement_counter = 0;
-                // }
             }
             else
             {
@@ -160,7 +166,7 @@ void Game::handlePlace(Command command)
     }
     else
     {
-        std::cout << "PLACE command can only be executed during the PLACEMENT phase!" << std::endl;
+        std::cout << "[ERROR] Entered command is not valid in this phase!" << std::endl;
     }
 }
 
@@ -170,11 +176,17 @@ void Game::handleMove(Command command)
     {
         if (command.getParameters().size() == 5)
         {
-            int chips = std::stoi(command.getParameters()[0]);
-            int column = std::stoi(command.getParameters()[1]);
-            int row = std::stoi(command.getParameters()[2]);
-            int new_column = std::stoi(command.getParameters()[3]);
-            int new_row = std::stoi(command.getParameters()[4]);
+            double chips = std::stod(command.getParameters()[0]);
+            double column = std::stod(command.getParameters()[1]);
+            double row = std::stod(command.getParameters()[2]);
+            double new_column = std::stod(command.getParameters()[3]);
+            double new_row = std::stod(command.getParameters()[4]);
+            if (!isInteger(chips) || !isInteger(column) || !isInteger(row) || !isInteger(new_column) || !isInteger(new_row))
+            {
+                std::cout << "[ERROR] Invalid amount! Must be a number > 0!" << std::endl;
+                return;
+            }
+
             // Check if the provided column and row are within bounds of the map
             int check = map_->checkValidField(active_player_, column - 1, row - 1);
             if (!check)
@@ -188,8 +200,6 @@ void Game::handleMove(Command command)
                 {
                     // Place chips at the specified column and row for the active player
                     map_->moveChips(column - 1, row - 1, chips);
-                    // active_player_->setPassed(true);
-                    // map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
                     toggleActivePlayer();
                     if (getActivePlayer()->hasPassed())
                     {
@@ -205,7 +215,7 @@ void Game::handleMove(Command command)
     }
     else
     {
-        std::cout << "MOVE command can only be executed during the PLACEMENT phase!" << std::endl;
+        std::cout << "[ERROR] Entered command is not valid in this phase!" << std::endl;
     }
 }
 
