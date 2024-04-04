@@ -155,9 +155,10 @@ void Game::handlePlace(Command command)
 
 void Game::handleMove(Command command)
 {
-    if (phase_ == Phase::MOVEMENT)
+    if (phase_ != Phase::MOVEMENT)
     {
         std::cout << "[ERROR] Entered command is not valid in this phase!" << std::endl;
+        return;
     }
     double chips = std::stod(command.getParameters()[0]);
     double column = std::stod(command.getParameters()[1]);
@@ -175,30 +176,23 @@ void Game::handleMove(Command command)
     if (!check)
     {
         std::cout << "[ERROR] Invalid origin!" << std::endl;
+        return;
     }
-    else
+    int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
+    if (valid_move)
     {
-        int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-        if (valid_move)
+        // Place chips at the specified column and row for the active player
+        map_->moveChips(column - 1, row - 1, chips);
+        toggleActivePlayer();
+        if (getActivePlayer()->hasPassed())
         {
-            // Place chips at the specified column and row for the active player
-            map_->moveChips(column - 1, row - 1, chips);
             toggleActivePlayer();
-            if (getActivePlayer()->hasPassed())
-            {
-                toggleActivePlayer();
-            }
-        }
-        if (toggle)
-        {
-            map_->printMap();
         }
     }
-
-    // else
-    // {
-    //     std::cout << "[ERROR] Entered command is not valid in this phase!" << std::endl;
-    // }
+    if (toggle)
+    {
+        map_->printMap();
+    }
 }
 
 void Game::handleInfo()
@@ -210,14 +204,15 @@ void Game::handleInfo()
 }
 void Game::handlePass()
 {
-    if (active_player_ == player_a_)
-    {
-        player_a_->setPassed(true);
-    }
-    else
-    {
-        player_b_->setPassed(true);
-    }
+    // if (active_player_ == player_a_)
+    // {
+    //     player_a_->setPassed(true);
+    // }
+    // else
+    // {
+    //     player_b_->setPassed(true);
+    // }
+    active_player_->setPassed(true);
     if (player_a_->hasPassed() && player_b_->hasPassed())
     {
         if (current_round_ == max_rounds_ && phase_ == Phase::MOVEMENT)
