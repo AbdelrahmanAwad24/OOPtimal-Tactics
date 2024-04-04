@@ -72,6 +72,7 @@ public:
     void handleMove(Command command);
     void handlePass();
     void handleInfo();
+    bool isInteger(double number);
 };
 
 #endif
