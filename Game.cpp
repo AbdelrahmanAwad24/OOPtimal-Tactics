@@ -107,17 +107,23 @@ void Game::start()
 
 void Game::handlePlace(Command command)
 {
-
     if (phase_ != Phase::PLACEMENT)
     {
         std::cout << "[ERROR] Entered command is not valid in this phase!" << std::endl;
         return;
     }
-    double chips = std::stod(command.getParameters()[0]);
-    double column = std::stod(command.getParameters()[1]);
-    double row = std::stod(command.getParameters()[2]);
-    // check if all inputs is int or not.
-    if (!isInteger(chips) || !isInteger(column) || !isInteger(row))
+    int check_chips;
+    double chips;
+    if (Utils::decimalStringToInt(command.getParameters()[0], check_chips))
+    {
+        chips = std::stod(command.getParameters()[0]);
+    }
+    else
+    {
+        std::cout << "[ERROR] Invalid amount! Must be a number > 0!" << std::endl;
+        return;
+    }
+    if (!isInteger(chips)) //|| !isInteger(column) || !isInteger(row)
     {
         std::cout << "[ERROR] Invalid amount! Must be a number > 0!" << std::endl;
         return;
@@ -128,15 +134,30 @@ void Game::handlePlace(Command command)
         return;
     }
 
-    int valid_move = map_->placeChips(column - 1, row - 1, chips, active_player_);
-    if (valid_move == 1)
+    int check_column;
+    int check_row;
+    double column;
+    double row;
+    bool valid_column = Utils::decimalStringToInt(command.getParameters()[1], check_column);
+    bool valid_row = Utils::decimalStringToInt(command.getParameters()[2], check_row);
+    if (!valid_row || !valid_column)
+    {
+        std::cout << "[ERROR] Invalid field!" << std::endl;
+        return;
+    }
+
+    column = std::stod(command.getParameters()[1]);
+    row = std::stod(command.getParameters()[2]);
+    int valid_move = 0;
+    if (isInteger(column) && isInteger(row))
+    {
+        valid_move = map_->placeChips(column - 1, row - 1, chips, active_player_);
+    }
+
+    if (column <= map_->getColumns() && row <= map_->getRows() && valid_move)
     {
         active_player_->setChips(active_player_->getChips() - chips);
         active_player_->setSavedChips(active_player_->getChips());
-    }
-    // Check if the provided column and row are within bounds of the map
-    if (column <= map_->getColumns() && row <= map_->getRows() && valid_move)
-    {
         if (active_player_->getChips() == 0)
         {
             active_player_->setPassed(true);
@@ -146,10 +167,15 @@ void Game::handlePlace(Command command)
         {
             setPhase(Phase::MOVEMENT);
         }
+        if (toggle)
+        {
+            map_->printMap();
+        }
     }
     else
     {
         std::cout << "[ERROR] Invalid field!" << std::endl;
+        return;
     }
 }
 
@@ -246,10 +272,6 @@ void Game::execute(Command command)
     {
     case CommandType::PLACE:
         handlePlace(command);
-        if (toggle)
-        {
-            map_->printMap();
-        }
         break;
 
     case CommandType::PASS:
