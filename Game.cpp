@@ -20,6 +20,14 @@ bool Game::isNumber(int param_number, Command command)
     return Utils::decimalStringToInt(command.getParameters().at(param_number), check_number);
 }
 
+bool Game::isTooFar(int column, int new_column, int row, int new_row)
+{
+    double column_distance = std::abs(column - new_column); // Calculate the absolute value of the subtraction
+    double row_distance = std::abs(row - new_row);
+
+    return column_distance > 1 || row_distance > 1; // Calculate the absolute value of the subtraction
+}
+
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
       current_round_(1), max_rounds_(maximum_rounds), phase_(Phase::PLACEMENT),
@@ -228,7 +236,7 @@ void Game::handleMove(Command command)
     double new_column = std::stod(command.getParameters()[3]);
     double new_row = std::stod(command.getParameters()[4]);
     int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-    if (valid_move == 3 || valid_move == 0 || (new_column == column && new_row == row)) //
+    if (valid_move == 3 || valid_move == 0 || (new_column == column && new_row == row) || isTooFar(column, new_column, row, new_row)) //
     {
         std::cout << "[ERROR] Invalid destination!" << std::endl;
         return;

@@ -74,6 +74,7 @@ public:
     void handleInfo();
     bool isInteger(double number);
     bool isNumber(int param_number, Command command);
+    bool isTooFar(int colum, int new_colum, int row, int new_row);
 };
 
 #endif
