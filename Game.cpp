@@ -208,8 +208,8 @@ void Game::handleMove(Command command)
     double row = std::stod(command.getParameters()[2]);
 
     // Check if the provided column and row are within bounds of the map
-    int valid_filed = map_->checkValidField(active_player_, column - 1, row - 1);
-    if (!valid_filed || !isInteger(column) || isInteger(row))
+    int valid_field = map_->checkValidField(active_player_, column - 1, row - 1);
+    if (!valid_field || !isInteger(column) || !isInteger(row))
     {
         std::cout << "[ERROR] Invalid origin!" << std::endl;
         return;
