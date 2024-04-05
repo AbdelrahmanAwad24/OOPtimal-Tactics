@@ -119,7 +119,7 @@ void Map::setColumns(int columns)
 
 int Map::placeChips(int column, int row, int chips, Player *player)
 {
-    if (column > columns_ || row > rows_)
+    if (column >= columns_ || row >= rows_)
     {
         return 0;
     }
