@@ -29,6 +29,7 @@ public:
     int getRows();
     void setFields(const std::vector<std::vector<Field *>> &fields);
     std::vector<std::vector<Field *>> &getFields();
+    int getFieldChips(int column, int row);
     void setOutputActive(bool output_active);
     bool isOutputActive();
     int placeChips(int column, int row, int chips, Player *player);

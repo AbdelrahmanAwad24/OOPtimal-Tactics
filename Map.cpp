@@ -179,6 +179,10 @@ int Map::checkValidField(Player *player, int column, int row)
     return fields_[row][column]->getPlayer()->getId() == player->getId();
     // return 0;
 }
+int Map::getFieldChips(int column, int row)
+{
+    return fields_[row][column]->getChips();
+}
 
 void Map::moveChips(int column, int row, int chips)
 {

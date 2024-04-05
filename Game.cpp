@@ -178,7 +178,7 @@ void Game::handleMove(Command command)
         std::cout << "[ERROR] Invalid origin!" << std::endl;
         return;
     }
-    if (chips > active_player_->getChips())
+    if (chips > map_->getFieldChips(column - 1, row - 1)) // chips > active_player_->getChips()
     {
         std::cout << "[ERROR] Invalid amount! Must be a number <= chips in player inventory!" << std::endl;
         return;
