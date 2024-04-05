@@ -7,13 +7,8 @@
 
 #define CONFIG_MAGIC_NUMBER "OOP"
 int Game::toggle = 1;
-int Game::placement_counter = 0;
-int Game::movement_counter = 0;
-int Game::toggle_flag = 0;
 int Game::placement_header = 1;
 int Game::movement_header = 1;
-// int Game::saved_chips_a = 0;
-// int Game::saved_chips_b = 0;
 
 bool Game::isInteger(double number)
 {
@@ -140,7 +135,6 @@ void Game::handlePlace(Command command)
         {
             active_player_->setPassed(true);
             toggleActivePlayer();
-            placement_counter++;
         }
         if (player_a_->hasPassed() && player_b_->hasPassed())
         {
@@ -204,14 +198,6 @@ void Game::handleInfo()
 }
 void Game::handlePass()
 {
-    // if (active_player_ == player_a_)
-    // {
-    //     player_a_->setPassed(true);
-    // }
-    // else
-    // {
-    //     player_b_->setPassed(true);
-    // }
     active_player_->setPassed(true);
     if (player_a_->hasPassed() && player_b_->hasPassed())
     {
@@ -219,26 +205,23 @@ void Game::handlePass()
         {
             setPhase(Phase::END);
         }
-        else
+        else if (phase_ == Phase::PLACEMENT)
         {
-            if (phase_ == Phase::PLACEMENT)
-            {
-                active_player_->setSavedChips(active_player_->getChips());
-                setPhase(Phase::MOVEMENT);
-                placement_header = 1;
-                movement_header = 1;
-                player_a_->setPassed(false);
-                player_b_->setPassed(false);
-            }
-            else if (phase_ == Phase::MOVEMENT)
-            {
-                setPhase(Phase::PLACEMENT);
-                placement_header = 1;
-                movement_header = 1;
-                player_a_->setPassed(false);
-                player_b_->setPassed(false);
-                current_round_++;
-            }
+            active_player_->setSavedChips(active_player_->getChips());
+            setPhase(Phase::MOVEMENT);
+            placement_header = 1;
+            movement_header = 1;
+            player_a_->setPassed(false);
+            player_b_->setPassed(false);
+        }
+        else if (phase_ == Phase::MOVEMENT)
+        {
+            setPhase(Phase::PLACEMENT);
+            placement_header = 1;
+            movement_header = 1;
+            player_a_->setPassed(false);
+            player_b_->setPassed(false);
+            current_round_++;
         }
     }
 }
@@ -332,7 +315,7 @@ bool Game::isRunning()
 {
     if (phase_ == Phase::PLACEMENT)
     {
-        if (placement_header)
+        if (placement_header) // Activated once in each came round
         {
             player_a_->setClaimedFields(0);
             player_b_->setClaimedFields(0);
@@ -356,7 +339,7 @@ bool Game::isRunning()
     }
     else if (phase_ == Phase::MOVEMENT)
     {
-        if (movement_header)
+        if (movement_header) // Activated once in each came round
         {
             player_a_->setClaimedFields(0);
             player_b_->setClaimedFields(0);
