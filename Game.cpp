@@ -207,8 +207,10 @@ void Game::handleMove(Command command)
     double column = std::stod(command.getParameters()[1]);
     double row = std::stod(command.getParameters()[2]);
 
-    // Check if the provided column and row are within bounds of the map
     int valid_field = map_->checkValidField(active_player_, column - 1, row - 1);
+
+    // Check if the provided column and row are within bounds of the map
+    //  valid_field = map_->checkValidField(active_player_, column - 1, row - 1);
     if (!valid_field || !isInteger(column) || !isInteger(row))
     {
         std::cout << "[ERROR] Invalid origin!" << std::endl;
@@ -227,7 +229,7 @@ void Game::handleMove(Command command)
     double new_column = std::stod(command.getParameters()[3]);
     double new_row = std::stod(command.getParameters()[4]);
     int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-    if (valid_move == 3)
+    if (valid_move == 3 || valid_move == 0)
     {
         std::cout << "[ERROR] Invalid destination!" << std::endl;
         return;

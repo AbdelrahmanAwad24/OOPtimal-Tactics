@@ -119,6 +119,10 @@ void Map::setColumns(int columns)
 
 int Map::placeChips(int column, int row, int chips, Player *player)
 {
+    if (column > columns_ || row > rows_)
+    {
+        return 0;
+    }
     // Update the number of chips in the specified field for the given player
     if (fields_[row][column]->isEmpty())
     {
@@ -166,19 +170,15 @@ int Map::placeChips(int column, int row, int chips, Player *player)
 }
 int Map::checkValidField(Player *player, int column, int row)
 {
-    if (fields_[row][column]->isEmpty() || fields_[row][column]->isWater())
+    if (column >= 0 && column < columns_ && row >= 0 && row < rows_)
     {
-        return 0;
+        if (fields_[row][column]->isEmpty() || fields_[row][column]->isWater())
+        {
+            return 0;
+        }
+        return fields_[row][column]->getPlayer()->getId() == player->getId();
     }
-    // if (fields_[row][column]->isWater())
-    // {
-    //     return 0;
-    // }
-    // if (fields_[row][column]->getPlayer()->getId() == player->getId())
-    // {
-    // }
-    return fields_[row][column]->getPlayer()->getId() == player->getId();
-    // return 0;
+    return 0;
 }
 int Map::getFieldChips(int column, int row)
 {
