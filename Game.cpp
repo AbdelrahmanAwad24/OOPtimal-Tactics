@@ -122,6 +122,12 @@ void Game::handlePlace(Command command)
         std::cout << "[ERROR] Invalid amount! Must be a number > 0!" << std::endl;
         return;
     }
+    if (chips > active_player_->getChips())
+    {
+        std::cout << "[ERROR] Invalid amount! Must be a number <= chips in player inventory!" << std::endl;
+        return;
+    }
+
     int valid_move = map_->placeChips(column - 1, row - 1, chips, active_player_);
     if (valid_move == 1)
     {
@@ -143,7 +149,7 @@ void Game::handlePlace(Command command)
     }
     else
     {
-        std::cout << "[ERROR] Invalid origin!" << std::endl;
+        std::cout << "[ERROR] Invalid field!" << std::endl;
     }
 }
 
@@ -166,22 +172,29 @@ void Game::handleMove(Command command)
     }
 
     // Check if the provided column and row are within bounds of the map
-    int check = map_->checkValidField(active_player_, column - 1, row - 1);
-    if (!check)
+    int valid_filed = map_->checkValidField(active_player_, column - 1, row - 1);
+    if (!valid_filed)
     {
         std::cout << "[ERROR] Invalid origin!" << std::endl;
         return;
     }
-    int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-    if (valid_move)
+    if (chips > active_player_->getChips())
     {
-        // Place chips at the specified column and row for the active player
-        map_->moveChips(column - 1, row - 1, chips);
+        std::cout << "[ERROR] Invalid amount! Must be a number <= chips in player inventory!" << std::endl;
+        return;
+    }
+    int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
+    if (valid_move == 3)
+    {
+        std::cout << "[ERROR] Invalid destination!" << std::endl;
+        return;
+    }
+    // Place chips at the specified column and row for the active player
+    map_->moveChips(column - 1, row - 1, chips);
+    toggleActivePlayer();
+    if (getActivePlayer()->hasPassed())
+    {
         toggleActivePlayer();
-        if (getActivePlayer()->hasPassed())
-        {
-            toggleActivePlayer();
-        }
     }
     if (toggle)
     {
