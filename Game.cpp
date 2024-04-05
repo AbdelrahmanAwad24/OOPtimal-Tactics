@@ -24,7 +24,10 @@ bool Game::isTooFar(int column, int new_column, int row, int new_row)
 {
     double column_distance = std::abs(column - new_column); // Calculate the absolute value of the subtraction
     double row_distance = std::abs(row - new_row);
-
+    if (column == new_column && row == new_row)
+    {
+        return 1;
+    }
     return column_distance > 1 || row_distance > 1; // Calculate the absolute value of the subtraction
 }
 
@@ -235,8 +238,13 @@ void Game::handleMove(Command command)
     }
     double new_column = std::stod(command.getParameters()[3]);
     double new_row = std::stod(command.getParameters()[4]);
+    if (isTooFar(column, new_column, row, new_row)) //
+    {
+        std::cout << "[ERROR] Invalid destination!" << std::endl;
+        return;
+    }
     int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-    if (valid_move == 3 || valid_move == 0 || (new_column == column && new_row == row) || isTooFar(column, new_column, row, new_row)) //
+    if (valid_move == 3 || valid_move == 0) //
     {
         std::cout << "[ERROR] Invalid destination!" << std::endl;
         return;
