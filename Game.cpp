@@ -14,6 +14,11 @@ bool Game::isInteger(double number)
 {
     return number > 0 && std::floor(number) == number;
 }
+bool Game::isNumber(int param_number, Command command)
+{
+    int check_number;
+    return Utils::decimalStringToInt(command.getParameters().at(param_number), check_number);
+}
 
 Game::Game(int maximum_rounds, char *config_path)
     : map_(nullptr), player_a_(nullptr), player_b_(nullptr),
@@ -112,9 +117,8 @@ void Game::handlePlace(Command command)
         std::cout << "[ERROR] Entered command is not valid in this phase!" << std::endl;
         return;
     }
-    int check_chips;
     double chips;
-    if (Utils::decimalStringToInt(command.getParameters()[0], check_chips))
+    if (isNumber(0, command))
     {
         chips = std::stod(command.getParameters()[0]);
     }
@@ -134,20 +138,14 @@ void Game::handlePlace(Command command)
         return;
     }
 
-    int check_column;
-    int check_row;
-    double column;
-    double row;
-    bool valid_column = Utils::decimalStringToInt(command.getParameters()[1], check_column);
-    bool valid_row = Utils::decimalStringToInt(command.getParameters()[2], check_row);
-    if (!valid_row || !valid_column)
+    if (!isNumber(1, command) || !isNumber(2, command)) // 1 for column / 2 for row --->paramter.at(index)
     {
         std::cout << "[ERROR] Invalid field!" << std::endl;
         return;
     }
 
-    column = std::stod(command.getParameters()[1]);
-    row = std::stod(command.getParameters()[2]);
+    double column = std::stod(command.getParameters()[1]);
+    double row = std::stod(command.getParameters()[2]);
     int valid_move = 0;
     if (isInteger(column) && isInteger(row))
     {
@@ -186,20 +184,32 @@ void Game::handleMove(Command command)
         std::cout << "[ERROR] Entered command is not valid in this phase!" << std::endl;
         return;
     }
-    double chips = std::stod(command.getParameters()[0]);
-    double column = std::stod(command.getParameters()[1]);
-    double row = std::stod(command.getParameters()[2]);
-    double new_column = std::stod(command.getParameters()[3]);
-    double new_row = std::stod(command.getParameters()[4]);
-    if (!isInteger(chips) || !isInteger(column) || !isInteger(row) || !isInteger(new_column) || !isInteger(new_row))
+    double chips;
+    if (isNumber(0, command))
+    {
+        chips = std::stod(command.getParameters()[0]);
+    }
+    else
     {
         std::cout << "[ERROR] Invalid amount! Must be a number > 0!" << std::endl;
         return;
     }
+    if (!isInteger(chips)) //|| !isInteger(column) || !isInteger(row) || !isInteger(new_column) || !isInteger(new_row
+    {
+        std::cout << "[ERROR] Invalid amount! Must be a number > 0!" << std::endl;
+        return;
+    }
+    if (!isNumber(1, command) || !isNumber(2, command)) // 1 for column / 2 for row --->paramter.at(index)
+    {
+        std::cout << "[ERROR] Invalid origin!" << std::endl;
+        return;
+    }
+    double column = std::stod(command.getParameters()[1]);
+    double row = std::stod(command.getParameters()[2]);
 
     // Check if the provided column and row are within bounds of the map
     int valid_filed = map_->checkValidField(active_player_, column - 1, row - 1);
-    if (!valid_filed)
+    if (!valid_filed || !isInteger(column) || isInteger(row))
     {
         std::cout << "[ERROR] Invalid origin!" << std::endl;
         return;
@@ -209,6 +219,13 @@ void Game::handleMove(Command command)
         std::cout << "[ERROR] Invalid amount! Must be a number <= chips in player inventory!" << std::endl;
         return;
     }
+    if (!isNumber(3, command) || !isNumber(4, command)) // 3 for new column / 4 for new row --->paramter.at(index)
+    {
+        std::cout << "[ERROR] Invalid destination!" << std::endl;
+        return;
+    }
+    double new_column = std::stod(command.getParameters()[3]);
+    double new_row = std::stod(command.getParameters()[4]);
     int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
     if (valid_move == 3)
     {

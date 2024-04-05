@@ -73,6 +73,7 @@ public:
     void handlePass();
     void handleInfo();
     bool isInteger(double number);
+    bool isNumber(int param_number, Command command);
 };
 
 #endif
