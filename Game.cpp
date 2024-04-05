@@ -154,7 +154,7 @@ void Game::handlePlace(Command command)
         valid_move = map_->placeChips(column - 1, row - 1, chips, active_player_);
     }
 
-    if (column <= map_->getColumns() && row <= map_->getRows() && valid_move)
+    if (column <= map_->getColumns() && row <= map_->getRows() && valid_move == 1)
     {
         active_player_->setChips(active_player_->getChips() - chips);
         active_player_->setSavedChips(active_player_->getChips());
