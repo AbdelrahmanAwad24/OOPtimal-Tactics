@@ -229,7 +229,7 @@ void Game::handleMove(Command command)
     double new_column = std::stod(command.getParameters()[3]);
     double new_row = std::stod(command.getParameters()[4]);
     int valid_move = map_->placeChips(new_column - 1, new_row - 1, chips, active_player_);
-    if (valid_move == 3 || valid_move == 0)
+    if (valid_move == 3 || valid_move == 0 || (new_column == column && new_row == row))
     {
         std::cout << "[ERROR] Invalid destination!" << std::endl;
         return;
