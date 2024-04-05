@@ -127,6 +127,10 @@ int Map::placeChips(int column, int row, int chips, Player *player)
         fields_[row][column]->setChips(chips);
         return 1;
     }
+    if (fields_[row][column]->isWater())
+    {
+        return 3;
+    }
     if (fields_[row][column]->getPlayer()->getId() == player->getId())
     {
         //! fields_[row][column]->setPlayer(player);
@@ -157,18 +161,15 @@ int Map::placeChips(int column, int row, int chips, Player *player)
         }
         return 2;
     }
-    else if (fields_[row][column]->isWater())
-    {
-        return 3;
-    }
+
     return 3;
 }
 int Map::checkValidField(Player *player, int column, int row)
 {
-    // if (fields_[row][column]->isEmpty())
-    // {
-    //     return 0;
-    // }
+    if (fields_[row][column]->isEmpty() || fields_[row][column]->isWater())
+    {
+        return 0;
+    }
     // if (fields_[row][column]->isWater())
     // {
     //     return 0;
