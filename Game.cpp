@@ -280,6 +280,9 @@ void Game::handlePass()
         }
         else if (phase_ == Phase::PLACEMENT)
         {
+            player_a_->setClaimedFields(0);
+            player_b_->setClaimedFields(0);
+            map_->calculateOcuppiedFields();
             player_a_->setSavedChips(player_a_->getChips());
             player_b_->setSavedChips(player_b_->getChips());
             setPhase(Phase::MOVEMENT);
@@ -333,7 +336,6 @@ void Game::execute(Command command)
     case CommandType::INVALID:
     case CommandType::QUIT:
     case CommandType::WRONG_PARAM:
-
         break;
     }
 }
@@ -392,8 +394,8 @@ bool Game::isRunning()
             map_->calculateOcuppiedFields();
             player_a_->setPassed(false);
             player_b_->setPassed(false);
-            double gained_chips_a = std::ceil(player_a_->getClaimedFields() / 3.0) + player_a_->getSavedChips();
-            double gained_chips_b = std::ceil(player_b_->getClaimedFields() / 3.0) + player_b_->getSavedChips();
+            double gained_chips_a = std::ceil(static_cast<double>(player_a_->getClaimedFields()) / 3.0) + player_a_->getSavedChips();
+            double gained_chips_b = std::ceil(static_cast<double>(player_b_->getClaimedFields()) / 3.0) + player_b_->getSavedChips();
             player_a_->setChips(gained_chips_a);
             player_b_->setChips(gained_chips_b);
             handleActivePlayer();
