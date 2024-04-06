@@ -280,7 +280,8 @@ void Game::handlePass()
         }
         else if (phase_ == Phase::PLACEMENT)
         {
-            active_player_->setSavedChips(active_player_->getChips());
+            player_a_->setSavedChips(player_a_->getChips());
+            player_b_->setSavedChips(player_b_->getChips());
             setPhase(Phase::MOVEMENT);
             placement_header = 1;
             movement_header = 1;
