@@ -178,10 +178,7 @@ int Map::putChips(int column, int row, int chips, Player *player)
     }
     if (fields_[row][column]->isEmpty())
     {
-        fields_[row][column]->setPlayer(player);
-        fields_[row][column]->setIsEmpty(false);
-        fields_[row][column]->setChips(chips);
-        return 1;
+        return 0;
     }
     if (fields_[row][column]->getPlayer()->getId() == player->getId())
     {
@@ -192,56 +189,6 @@ int Map::putChips(int column, int row, int chips, Player *player)
     return 0;
 }
 
-// int Map::placeChips(int column, int row, int chips, Player *player)
-// {
-//     if (column >= columns_ || row >= rows_)
-//     {
-//         return 0;
-//     }
-//     // Update the number of chips in the specified field for the given player
-//     if (fields_[row][column]->isEmpty())
-//     {
-//         fields_[row][column]->setPlayer(player);
-//         fields_[row][column]->setIsEmpty(false);
-//         fields_[row][column]->setChips(chips);
-//         return 1;
-//     }
-//     if (fields_[row][column]->isWater())
-//     {
-//         return 3;
-//     }
-//     if (fields_[row][column]->getPlayer()->getId() == player->getId())
-//     {
-//         //! fields_[row][column]->setPlayer(player);
-//         fields_[row][column]->setIsEmpty(false);
-//         fields_[row][column]->setChips(chips);
-//         return 1;
-//     }
-//     else if (fields_[row][column]->getPlayer()->getId() != player->getId())
-//     {
-//         int destination_chips = fields_[row][column]->getChips();
-//         int new_chips = destination_chips + 1 - chips;
-//         if (new_chips > 0)
-//         {
-//             fields_[row][column]->resetChips(0);
-//             fields_[row][column]->setChips(new_chips);
-//         }
-//         else if (new_chips < 0)
-//         {
-//             fields_[row][column]->setPlayer(player);
-//             fields_[row][column]->resetChips(0);
-//             fields_[row][column]->setChips(-new_chips);
-//         }
-//         else
-//         {
-//             fields_[row][column]->setIsEmpty(true);
-//             fields_[row][column]->setPlayer(nullptr);
-//             fields_[row][column]->resetChips(0);
-//         }
-//         return 2;
-//     }
-//     return 3;
-// }
 int Map::checkValidField(Player *player, int column, int row)
 {
     if (column >= 0 && column < columns_ && row >= 0 && row < rows_)
