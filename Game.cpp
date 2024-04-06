@@ -160,7 +160,7 @@ void Game::handlePlace(Command command)
     int valid_move = 0;
     if (isInteger(column) && isInteger(row))
     {
-        valid_move = map_->placeChips(column - 1, row - 1, chips, active_player_);
+        valid_move = map_->putChips(column - 1, row - 1, chips, active_player_);
     }
 
     if (column <= map_->getColumns() && row <= map_->getRows() && valid_move == 1)

@@ -166,6 +166,32 @@ int Map::placeChips(int column, int row, int chips, Player *player)
 
     return 3;
 }
+int Map::putChips(int column, int row, int chips, Player *player)
+{
+    if (column >= columns_ || row >= rows_)
+    {
+        return 0;
+    }
+    if (fields_[row][column]->isWater())
+    {
+        return 0;
+    }
+    if (fields_[row][column]->isEmpty())
+    {
+        fields_[row][column]->setPlayer(player);
+        fields_[row][column]->setIsEmpty(false);
+        fields_[row][column]->setChips(chips);
+        return 1;
+    }
+    if (fields_[row][column]->getPlayer()->getId() == player->getId())
+    {
+        fields_[row][column]->setIsEmpty(false);
+        fields_[row][column]->setChips(chips);
+        return 1;
+    }
+    return 0;
+}
+
 // int Map::placeChips(int column, int row, int chips, Player *player)
 // {
 //     if (column >= columns_ || row >= rows_)
