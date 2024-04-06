@@ -228,7 +228,7 @@ void Game::handleMove(Command command)
     }
     if (chips > map_->getFieldChips(column - 1, row - 1)) // chips > active_player_->getChips()
     {
-        std::cout << "[ERROR] Invalid amount! Must be a number <= chips in player inventory!" << std::endl;
+        std::cout << "[ERROR] Invalid amount! Must be a number <= chips on origin field!" << std::endl;
         return;
     }
     if (!isNumber(3, command) || !isNumber(4, command)) // 3 for new column / 4 for new row --->paramter.at(index)
